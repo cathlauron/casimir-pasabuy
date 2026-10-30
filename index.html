@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Casimir Pasa"buy" · MilkLove Fancon & MuvMuv</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --mint:#dff3e6; --mint-2:#bfe6cc; --mint-ink:#2f7a52;
+  --pink:#ffe3ec; --pink-2:#ffb8cf; --pink-ink:#d9437a;
+  --cream:#fffaf6; --ink:#3a2f36; --muted:#7c6d75; --line:#f1dce4;
+  --radius:18px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:Nunito,system-ui,sans-serif;color:var(--ink);background:
+  radial-gradient(1200px 500px at 10% -10%,var(--mint) 0,transparent 60%),
+  radial-gradient(900px 500px at 100% 0,var(--pink) 0,transparent 60%),var(--cream);
+  padding-bottom:96px}
+h1,h2,h3{font-family:Fredoka,Nunito,sans-serif;margin:0}
+a{color:var(--pink-ink)}
+.wrap{max-width:1120px;margin:0 auto;padding:0 18px}
+header.hero{padding-top:34px;padding-bottom:18px}
+.brand{display:inline-flex;align-items:center;gap:8px;background:#fff;border:1.5px solid var(--line);border-radius:999px;padding:6px 14px 6px 8px;font-weight:800;font-size:14px}
+.brand .dot{width:56px;height:56px;border-radius:50%;display:block;border:2px solid #fff;box-shadow:0 2px 6px rgba(120,60,90,.15)}
+.brand{padding:5px 16px 5px 5px;font-size:15px;gap:10px}
+.hero h1{font-size:clamp(30px,5vw,50px);line-height:1.05;margin:16px 0 10px;color:var(--pink-ink);letter-spacing:-.5px}
+.hero h1 span{color:var(--mint-ink)}
+.hero p.lead{font-size:17px;max-width:680px;color:var(--muted);margin:0 0 18px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{background:#fff;border:1.5px solid var(--line);border-radius:999px;padding:7px 13px;font-size:13.5px;font-weight:700}
+.chip b{color:var(--pink-ink)}
+.chip.mint{background:var(--mint);border-color:var(--mint-2)}
+section{margin:26px 0}
+.card-box{background:#fff;border:1.5px solid var(--line);border-radius:var(--radius);padding:20px}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.step{background:#fff;border:1.5px solid var(--line);border-radius:var(--radius);padding:16px}
+.step .n{width:30px;height:30px;border-radius:50%;background:var(--pink-2);color:#fff;font-family:Fredoka;font-weight:700;display:grid;place-items:center;margin-bottom:8px}
+.step h3{font-size:17px;margin-bottom:4px}
+.step p{margin:0;font-size:14px;color:var(--muted)}
+.sec-head{display:flex;justify-content:space-between;align-items:end;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.sec-head h2{font-size:26px}
+.sec-head p{margin:4px 0 0;color:var(--muted);font-size:14px}
+.tabs{display:inline-flex;background:#fff;border:1.5px solid var(--line);border-radius:999px;padding:4px}
+.tabs button{border:0;background:none;font:700 14px Nunito;padding:8px 14px;border-radius:999px;cursor:pointer;color:var(--muted)}
+.tabs button.on{background:var(--pink-ink);color:#fff}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px}
+.item{background:#fff;border:1.5px solid var(--line);border-radius:var(--radius);overflow:hidden;display:flex;flex-direction:column;transition:border-color .15s,box-shadow .15s}
+.item.inbag{border-color:var(--pink-2);box-shadow:0 0 0 3px var(--pink)}
+.item .ph{position:relative;aspect-ratio:4/3;background:#fff;overflow:hidden;border-bottom:1.5px solid var(--line)}
+.item .ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;padding:6px}
+.item .bd{padding:12px 14px 14px;display:flex;flex-direction:column;gap:6px;flex:1}
+.tag{align-self:flex-start;font-size:11px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;padding:3px 8px;border-radius:999px;background:var(--mint);color:var(--mint-ink)}
+.tag.pink{background:var(--pink);color:var(--pink-ink)}
+.item h3{font-size:16.5px;line-height:1.2}
+.item .meta{font-size:12.5px;color:var(--muted)}
+.price{display:flex;align-items:baseline;gap:8px;margin-top:auto}
+.price .php{font-family:Fredoka;font-weight:700;font-size:22px;color:var(--pink-ink)}
+.price .thb{font-size:12.5px;color:var(--muted)}
+.slots{font-size:12.5px;font-weight:700;color:var(--mint-ink)}
+.slots.low{color:#c9622b}.slots.out{color:#a0909a}
+.qty{display:flex;align-items:center;gap:8px}
+.qty button{width:34px;height:34px;border-radius:50%;border:1.5px solid var(--pink-2);background:#fff;color:var(--pink-ink);font:700 18px Fredoka;cursor:pointer;line-height:1}
+.qty button:disabled{opacity:.35;cursor:not-allowed}
+.qty .v{min-width:22px;text-align:center;font-weight:800}
+.qty .lbl{font-size:12.5px;color:var(--muted);min-width:34px}
+.sizes{display:flex;flex-direction:column;gap:6px}
+.note{background:var(--pink);border:1.5px dashed var(--pink-2);border-radius:14px;padding:12px 14px;font-size:14px}
+.note.mint{background:var(--mint);border-color:var(--mint-2)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:760px){.two{grid-template-columns:1fr}}
+.opt{background:#fff;border:1.5px solid var(--line);border-radius:var(--radius);padding:16px}
+.opt h3{font-size:18px;margin-bottom:6px}
+.opt p{margin:0;font-size:14px;color:var(--muted)}
+form .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:640px){form .row{grid-template-columns:1fr}}
+label{display:block;font-weight:700;font-size:13.5px;margin:10px 0 5px}
+label .opt-l{font-weight:600;color:var(--muted)}
+input,select,textarea{width:100%;font:15px Nunito;padding:11px 12px;border:1.5px solid var(--line);border-radius:12px;background:#fff;color:var(--ink)}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--pink-2);box-shadow:0 0 0 3px var(--pink)}
+textarea{min-height:80px;resize:vertical}
+fieldset{border:0;padding:0;margin:0}
+.formsec{border-top:1.5px dashed var(--line);margin-top:18px;padding-top:14px}
+.formsec:first-child{border-top:0;margin-top:0;padding-top:0}
+.formsec h3{font-size:18px;color:var(--mint-ink)}
+.check{display:flex;gap:10px;align-items:flex-start;font-weight:600;font-size:14px;margin:10px 0}
+.check input{width:20px;height:20px;margin-top:1px;flex:none;accent-color:var(--pink-ink)}
+.summary table{width:100%;border-collapse:collapse;font-size:14px}
+.summary td{padding:7px 0;border-bottom:1px solid var(--line);vertical-align:top}
+.summary td.r{text-align:right;white-space:nowrap;font-weight:700}
+.summary .tot td{border:0;font-family:Fredoka;font-size:20px;color:var(--pink-ink);padding-top:12px}
+.pref{border:1.5px solid var(--line);border-radius:14px;padding:10px 12px;margin:8px 0;background:var(--cream)}
+.pref .nm{font-weight:800;font-size:14px;margin-bottom:6px}
+.pref .radios{display:flex;gap:14px;flex-wrap:wrap;font-size:14px}
+.pref .radios label{display:flex;gap:6px;align-items:center;margin:0;font-weight:600}
+.pref .radios input{width:auto;accent-color:var(--pink-ink)}
+.pref select{margin-top:8px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:999px;padding:13px 22px;font:800 15px Nunito;cursor:pointer;background:var(--pink-ink);color:#fff;text-decoration:none}
+.btn.ghost{background:#fff;color:var(--pink-ink);border:1.5px solid var(--pink-2)}
+.btn.mint{background:var(--mint-ink)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.err{color:#c0392b;font-size:13px;font-weight:700;margin-top:8px;min-height:1em}
+.bar{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1.5px solid var(--line);box-shadow:0 -6px 20px rgba(120,60,90,.08);z-index:20}
+.bar .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-top:12px;padding-bottom:12px}
+.bar .t{font-weight:800}
+.bar .t small{display:block;font-weight:600;color:var(--muted);font-size:12.5px}
+.modal{position:fixed;inset:0;background:rgba(58,47,54,.45);display:none;align-items:center;justify-content:center;padding:16px;z-index:50}
+.modal.on{display:flex}
+.modal .box{background:#fff;border-radius:22px;max-width:620px;width:100%;max-height:92vh;overflow:auto;padding:22px}
+.modal pre{white-space:pre-wrap;background:var(--cream);border:1.5px solid var(--line);border-radius:14px;padding:14px;font:13.5px/1.5 ui-monospace,Menlo,Consolas,monospace;max-height:42vh;overflow:auto}
+.oid{font-family:Fredoka;font-size:28px;color:var(--pink-ink)}
+.acts{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+.faq details{background:#fff;border:1.5px solid var(--line);border-radius:14px;padding:12px 16px;margin-bottom:8px}
+.faq summary{font-weight:800;cursor:pointer}
+.faq p{margin:8px 0 0;color:var(--muted);font-size:14px}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:24px 0}
+.hidden{display:none!important}
+.final{background:var(--pink);border:1.5px solid var(--pink-2)!important;border-radius:16px;padding:14px 16px!important;margin-top:18px}
+.final .summary table td{border-color:var(--pink-2)}
+.sendsteps{margin:10px 0;padding:0;list-style:none;counter-reset:s}
+.sendsteps li{counter-increment:s;display:flex;gap:10px;align-items:flex-start;font-size:14.5px;margin:8px 0}
+.sendsteps li::before{content:counter(s);flex:none;width:24px;height:24px;border-radius:50%;background:var(--pink-ink);color:#fff;font:700 13px Fredoka;display:grid;place-items:center}
+.warn{background:#fff6e5;border:1.5px solid #f3c77a;border-radius:12px;padding:10px 12px;font-size:13.5px;font-weight:700;color:#8a5a00}
+.done{background:var(--mint);border:1.5px solid var(--mint-2);border-radius:14px;padding:14px;font-size:14.5px}
+.qrbox{display:flex;gap:14px;align-items:center;background:var(--cream);border:1.5px solid var(--line);border-radius:14px;padding:12px;margin-top:10px;font-size:14px}
+.qrbox img{width:190px;background:#fff;padding:6px;border-radius:10px;border:1px solid var(--line);flex:none}
+@media (max-width:420px){.qrbox{flex-direction:column;text-align:center}.qrbox img{width:200px}}
+</style>
+</head>
+<body>
+
+<header class="hero wrap">
+  <div class="brand"><img class="dot" src="img/avatar.png" alt="Casimir">Casimir Pasa"buy"</div>
+  <h1>MilkLove Fancon merch <span>&amp; MuvMuv goodies</span>, bought for you in Bangkok</h1>
+  <p class="lead">We're going to the <b>Milk Love Whimsical House Fancon</b> on Nov 15 and the GMMTV Shop while we're in Bangkok. Pick what you want, we buy it in person and bring it home to the Philippines for you.</p>
+  <div class="chips">
+    <span class="chip">🗓 Order cut-off: <b>Nov 14, 11:59 PM</b></span>
+    <span class="chip">🛍 Booth purchase: <b>Nov 15</b></span>
+    <span class="chip">💸 Refunds by: <b>Nov 16</b></span>
+    <span class="chip">📦 Ships from PH: <b>Nov 21</b></span>
+  </div>
+</header>
+
+<script type="application/json" id="slots-state">/*SLOTS*/{}/*/SLOTS*/</script>
+<main class="wrap">
+
+<section>
+  <div class="steps">
+    <div class="step"><div class="n">1</div><h3>Pick your items</h3><p>Add items below. All prices are in pesos.</p></div>
+    <div class="step"><div class="n">2</div><h3>Fill in your details</h3><p>Tell us where to ship and what to do if an item sells out at the booth.</p></div>
+    <div class="step"><div class="n">3</div><h3>DM us your order</h3><p>Copy your order summary and send it to <b>@csmrzrzr</b> on IG or TikTok. We'll confirm your slots.</p></div>
+    <div class="step"><div class="n">4</div><h3>Pay in full via GCash</h3><p>Once we confirm, scan our GCash QR and send your screenshot + reference number. Payment must be in by Nov 14.</p></div>
+  </div>
+</section>
+
+<section id="shop">
+  <div class="sec-head">
+    <div>
+      <h2>Choose your items</h2>
+      <p id="tabnote">Official Milk Love Whimsical House Fancon merchandise, bought at the booth on Nov 15.</p>
+    </div>
+    <div class="tabs" role="tablist">
+      <button class="on" data-tab="fancon" role="tab">Fancon merch</button>
+      <button data-tab="shop" role="tab">GMMTV Shop MuvMuv</button>
+    </div>
+  </div>
+  <div id="grid" class="grid"></div>
+  <p id="shopnote" class="note mint hidden" style="margin-top:14px">These were <b>in stock on the GMMTV Shop website as of Oct 30, 2026</b>. We'll buy them at the GMMTV Shop while we're in Bangkok (Nov 13–20). Stock can change before then, so the same refund-or-swap choice applies.</p>
+</section>
+
+<section id="soldout">
+  <div class="sec-head"><div><h2>If an item sells out</h2><p>Fancon booths sell out fast. We buy in the order payments were received, but we can't promise every item. You'll choose one of these for each item when you check out:</p></div></div>
+  <div class="two">
+    <div class="opt"><h3>💸 Full refund</h3><p>We send back <b>100% of what you paid for that item</b> through GCash by <b>Nov 16, 2026</b>. No fees taken.</p></div>
+    <div class="opt"><h3>🔁 Swap for a GMMTV Shop item</h3><p>Pick a backup from the GMMTV Shop MuvMuv list. If it costs more, <b>you pay the difference</b>. If it costs less, we refund the difference. If the backup is also gone, we refund you in full.</p></div>
+  </div>
+</section>
+
+<section id="checkout">
+  <div class="sec-head"><div><h2>Your order &amp; details</h2><p>Fill in your details, review your order, then send it to us. <b>Your order is only captured once we receive your message.</b></p></div></div>
+  <div style="max-width:760px">
+    <form id="form" class="card-box" novalidate>
+      <div class="formsec">
+        <h3>Contact</h3>
+        <div class="row">
+          <div><label for="f-name">Full name</label><input id="f-name" required autocomplete="name"></div>
+          <div><label for="f-handle">IG / TikTok username</label><input id="f-handle" required placeholder="@yourname"></div>
+        </div>
+        <div class="row">
+          <div><label for="f-mobile">Mobile number</label><input id="f-mobile" required inputmode="tel" placeholder="09XX XXX XXXX" autocomplete="tel"></div>
+          <div><label for="f-email">Email <span class="opt-l">(optional)</span></label><input id="f-email" type="email" autocomplete="email"></div>
+        </div>
+      </div>
+      <div class="formsec">
+        <h3>Shipping address</h3>
+        <label for="f-street">House no., street, building</label><input id="f-street" required autocomplete="address-line1">
+        <div class="row">
+          <div><label for="f-brgy">Barangay</label><input id="f-brgy" required></div>
+          <div><label for="f-city">City / Municipality</label><input id="f-city" required autocomplete="address-level2"></div>
+        </div>
+        <div class="row">
+          <div><label for="f-prov">Province</label><input id="f-prov" required autocomplete="address-level1"></div>
+          <div><label for="f-zip">ZIP code</label><input id="f-zip" required inputmode="numeric" autocomplete="postal-code"></div>
+        </div>
+        <label for="f-courier">Preferred courier</label>
+        <select id="f-courier"><option>J&amp;T Express</option><option>LBC</option><option>Flash Express</option><option>Lalamove (Metro Manila)</option><option>No preference</option></select>
+        <p class="note" style="margin-top:10px">Shipping isn't included in your item total. We'll message you the shipping fee when we pack your order, and parcels go out starting <b>Nov 21</b>.</p>
+      </div>
+      <div class="formsec">
+        <h3>If something sells out</h3>
+        <div id="prefs"><p class="meta" style="color:var(--muted);font-size:14px">Add items above and your choices will show here.</p></div>
+      </div>
+      <div class="formsec">
+        <h3>Special request <span class="opt-l" style="font-family:Nunito;font-size:14px">(optional)</span></h3>
+        <label for="f-req">Want another GMMTV item that isn't listed? Tell us the item and link. We'll check if we can get it and quote you first.</label>
+        <textarea id="f-req" placeholder="e.g. MilkLove photo set from shop.gmm-tv.com/product/…"></textarea>
+      </div>
+      <div class="formsec">
+        <h3>Payment confirmation</h3>
+        <p style="font-size:14px;color:var(--muted);margin:6px 0 0"><b>Wait for our DM confirming your slots before paying.</b> Then scan this QR with GCash, pay the <b>full item total</b> by <b>Nov 14</b>, and send us your screenshot.</p>
+        <div class="qrbox"><img src="img/gcash-qr.png" alt="GCash / InstaPay QR code for AN*****A P."><div><b>GCash · InstaPay QR</b><br>Account: AN*****A P.<br><span style="color:var(--muted)">Enter your item total when you scan. Put your order ID in the message.</span></div></div>
+        <div class="row">
+          <div><label for="f-gname">GCash account name you'll pay from</label><input id="f-gname" required></div>
+          <div><label for="f-ref">GCash reference no. <span class="opt-l">(after paying)</span></label><input id="f-ref" inputmode="numeric" placeholder="Add it now or send it later"></div>
+        </div>
+      </div>
+      <div class="formsec final">
+        <h3>Last step: review &amp; send your order</h3>
+        <div class="summary" id="sum" style="margin-top:8px"><p style="color:var(--muted);font-size:14px">Your bag is empty. Add items to get started.</p></div>
+        <label class="check"><input type="checkbox" id="c1" required><span>I understand that random items (cards, blind boxes) can't be chosen, and that orders can't be cancelled once the item is bought.</span></label>
+        <label class="check"><input type="checkbox" id="c2" required><span>I'll pay the full amount via GCash by Nov 14, 2026, and pay local shipping separately when my order ships.</span></label>
+      </div>
+      <div class="err" id="err"></div>
+      <div class="acts"><button class="btn" type="submit">Review &amp; send my order →</button></div>
+    </form>
+  </div>
+</section>
+
+<section class="faq">
+  <div class="sec-head"><div><h2>Good to know</h2></div></div>
+  <details><summary>What about random items?</summary><p>Collectible random cards (10 of 35 per pack) and MuvMuv random doll keychain boxes are sealed blind items. You get whatever is inside, and they can't be exchanged.</p></details>
+  <details><summary>Can I cancel?</summary><p>You can cancel and get a full refund up until the cut-off (Nov 14, 11:59 PM). After we buy your items, orders are final.</p></details>
+  <details><summary>How do I reach you?</summary><p>DM <b>@csmrzrzr</b> on <a href="https://www.instagram.com/csmrzrzr/" target="_blank" rel="noopener">Instagram</a> or <a href="https://www.tiktok.com/@csmrzrzr" target="_blank" rel="noopener">TikTok</a>.</p></details>
+</section>
+
+<footer>Casimir Pasa"buy" is a personal shopping service run by fans. We're not affiliated with GMMTV. Product photos are from the official merch announcement and GMMTV Shop listings.</footer>
+</main>
+
+<div class="bar" id="bar">
+  <div class="wrap">
+    <div class="t" id="bartext">0 items · ₱0<small>Shipping billed separately</small></div>
+    <button class="btn" type="button" id="bar-go">Review &amp; send my order →</button>
+  </div>
+</div>
+
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="mtitle">
+  <div class="box">
+    <h2 id="mtitle" style="font-size:22px">Last step: send us your order 📩</h2>
+    <p style="margin:6px 0 2px;color:var(--muted);font-size:14px">Your order ID</p>
+    <div class="oid" id="oid"></div>
+    <p class="warn">Your order is NOT captured yet. We only receive it once you send this message to @csmrzrzr.</p>
+    <ol class="sendsteps">
+      <li><span>Tap <b>Copy &amp; open Instagram DM</b> (or TikTok).</span></li>
+      <li><span>Paste the message in the chat with <b>@csmrzrzr</b> and send it.</span></li>
+      <li><span>Wait for our reply confirming your slots, then pay with the GCash QR.</span></li>
+    </ol>
+    <div class="acts">
+      <a class="btn" id="go-ig" href="https://ig.me/m/csmrzrzr" target="_blank" rel="noopener">Copy &amp; open Instagram DM</a>
+      <a class="btn ghost" id="go-tt" href="https://www.tiktok.com/@csmrzrzr" target="_blank" rel="noopener">Copy &amp; open TikTok</a>
+    </div>
+    <p id="copymsg" style="font-size:13px;color:var(--mint-ink);font-weight:700;min-height:1em;margin:8px 0"></p>
+    <details><summary style="cursor:pointer;font-weight:700;font-size:14px">See the message we'll receive</summary><pre id="otext"></pre>
+      <button class="btn ghost" id="copy" type="button" style="margin-top:8px">Copy message only</button>
+      <p style="font-size:13px;color:var(--muted)">If copying doesn't work, press and hold the text to select it.</p></details>
+    <label class="check" style="margin-top:14px"><input type="checkbox" id="sent"><span>I've sent my order message to @csmrzrzr.</span></label>
+    <div id="donebox" class="done hidden">🎉 Thank you! Keep your order ID <b id="oid2"></b>, and take a screenshot of this screen. We'll reply in your DMs to confirm your slots.</div>
+    <div class="acts"><button class="btn ghost" id="close" type="button">Back to my order</button></div>
+  </div>
+</div>
+
+<script>
+/* ===== SETTINGS: edit these ===== */
+const RATE = 1.92;     // pesos per baht (locked)
+const MARKUP = 0.12;   // service fee
+/* "taken" = slots already confirmed/paid. Update as orders come in. */
+const FANCON = [
+  {id:'card',  name:'Collectible Random Card', thb:200, max:10, taken:0, meta:'5.5 × 8.5 cm · random 10 of 35 cards per pack', tag:'Random'},
+  {id:'tps',   name:'Transparent Photo Set', thb:390, max:10, taken:0, meta:'4 transparent photocards, 2 photo strips, 1 photo keychain'},
+  {id:'talkie',name:'Talkie MuvMuv Doll Keychain', thb:990, max:5, taken:0, meta:'17 cm · 14 voice messages · replaceable battery'},
+  {id:'holder',name:'MuvMuv Card Holder with Photocard', thb:350, max:5, taken:0, meta:'12 × 14.7 cm · photocard 5.5 × 8.5 cm'},
+  {id:'tee',   name:'Official T-Shirt', thb:750, max:5, taken:0, meta:'Printed patch & postcard · chest S 36" · M 38" · L 42" · XL 46" · XXL 48"', sizes:['S','M','L','XL','XXL']},
+  {id:'acrylic',name:'Acrylic Photo Display Set', thb:650, max:5, taken:0, meta:'19 × 14.8 cm · photocard 5.5 × 8.5 cm'},
+  {id:'randoll',name:'MuvMuv Random Doll Keychain (single box)', thb:450, max:6, taken:0, meta:'1 sealed blind box · 7 designs (1 secret) · 2.1–2.5 in', tag:'Random'},
+  {id:'headband',name:'MuvMuv Headband', thb:200, max:5, taken:0, meta:'≈ 24 × 5.5 cm'},
+  {id:'bag',   name:'MuvMuv Journey Bag', thb:1290, max:5, taken:0, meta:'31 × 24 × 12 cm · with postcard'},
+  {id:'strap', name:'MuvMuv Rubber Phone Strap', thb:250, max:5, taken:0, meta:'2.3 × 20.8 cm'}
+];
+const SHOP = [
+  ['necklace','MuvMuv Charm Necklace',590],['sitting','MuvMuv Sitting Buddy',1190],['blanket','MuvMuv Hoodie Blanket',1490],
+  ['plushtie','MuvMuv Plushie Hair Tie',450],['rubbercharm','MuvMuv Rubber Charm Set',290],['sweetie','MuvMuv Sweetie Keychain',290],
+  ['tumbler','MuvMuv Tumbler',490],['fan','MuvMuv Lenticular Hand Fan',150],['popstar','MuvMuv Pop Star Card Holder',290],
+  ['comb','MuvMuv Portable Comb',250],['sleeve','MuvMuv Photocard Sleeve Set',150],['earhat','MuvMuv Fluffy Ear Pop Hat',890],
+  ['backpack','MuvMuv Doll Backpack',1090],['hairband','MuvMuv Hairband',590],['elepants','MuvMuv Elephant Buddy Pants',590],
+  ['leathercard','MuvMuv Leather Multi Card Holder with Strap',590],['stamp','MuvMuv Self-Inking Stamp',250],
+  ['clip','MuvMuv Magnetic Utility Clip Keychain',300],['mirror','MuvMuv Mirror Keychain',290],['bagtag','Baby MuvMuv Rubber Bag Tag',390],
+  ['pencil','MuvMuv Plush Pencil Case',590],['idholder','MilkLove ID Holder Pin Keychain',250],['buckle','MilkLove Phone Buckle',290],
+  ['button','MuvMuv Button Cover Set',250],['pajamas','MuvMuv Sweet Dream Pajamas',1190],['zipfolder','MuvMuv Character Pocket Zip Folder',350],
+  ['phonecharm','MuvMuv Phone Charm',450],['minicard','MuvMuv Mini Card Holder with MilkLove Photocard',290],['glow','MuvMuv Glow Acrylic Keychain',250],
+  ['rubbertag','MuvMuv Character Rubber Tag',250],['hairband2','MuvMuv Hair Band',490],['floraclip','MuvMuv Flora Basket Rubber Hair Clip',350],
+  ['fluffycard','MuvMuv Fluffy Card Holder with MilkLove Photocard (Fanday 2024)',590]
+].map(([id,name,thb])=>({id:'s_'+id,img:id,name,thb,max:5,taken:0}));
+/* ===== end settings ===== */
+
+/* SLOTS: available slots per item, saved from the admin panel */
+const PRISTINE = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+const SLOTS = (()=>{try{return JSON.parse(document.getElementById('slots-state').textContent.replace('/*SLOTS*/','').replace('/*/SLOTS*/',''))||{}}catch(_){return {}}})();
+const SIZE_NOTE = {s_pajamas:'Size options vary. Tell us your size in the special request box.'};
+
+const php = thb => Math.ceil(Math.round(thb*RATE*(1+MARKUP)*100)/100);
+const peso = n => '₱' + n.toLocaleString('en-PH');
+const baht = n => '฿' + n.toLocaleString('en-US');
+const ALL = {}; FANCON.forEach(i=>{i.src='fancon';ALL[i.id]=i}); SHOP.forEach(i=>{i.src='shop';ALL[i.id]=i});
+const bag = {}; // key -> qty ; key is id or id|size
+const prefs = {}; // fancon id -> {mode:'refund'|'swap', swap:''}
+let tab = 'fancon';
+
+function qtyOf(id){let n=0;for(const k in bag){if(k.split('|')[0]===id)n+=bag[k]}return n}
+function left(i){const v=SLOTS[i.id];return Math.max(0, Number.isFinite(v)?v:i.max)}
+
+function itemCard(i){
+  const img = 'img/'+(i.src==='fancon'?i.id:'s_'+i.img)+'.jpg';
+  const l = left(i), q = qtyOf(i.id);
+  const slotCls = l===0?'out':(l<=2?'low':'');
+  const slotTxt = l===0?'Fully reserved':`${l} slot${l>1?'s':''} available`;
+  let controls;
+  if(i.sizes){
+    controls = '<div class="sizes">'+i.sizes.map(s=>{
+      const k=i.id+'|'+s, v=bag[k]||0;
+      return `<div class="qty"><span class="lbl">${s}</span><button type="button" data-k="${k}" data-d="-1" aria-label="Remove one ${s}" ${v?'':'disabled'}>−</button><span class="v">${v}</span><button type="button" data-k="${k}" data-d="1" aria-label="Add one ${s}" ${q<l?'':'disabled'}>+</button></div>`}).join('')+'</div>';
+  } else {
+    const v=bag[i.id]||0;
+    controls = `<div class="qty"><button type="button" data-k="${i.id}" data-d="-1" aria-label="Remove one" ${v?'':'disabled'}>−</button><span class="v">${v}</span><button type="button" data-k="${i.id}" data-d="1" aria-label="Add one" ${q<l?'':'disabled'}>+</button></div>`;
+  }
+  const tag = i.tag?`<span class="tag pink">${i.tag}</span>`:(i.src==='fancon'?'<span class="tag">Fancon exclusive</span>':'<span class="tag">GMMTV Shop</span>');
+  return `<article class="item ${q?'inbag':''}">
+    <div class="ph"><img src="${img}" alt="${i.name}" loading="lazy"></div>
+    <div class="bd">${tag}<h3>${i.name}</h3>${i.meta?`<div class="meta">${i.meta}</div>`:''}${SIZE_NOTE[i.id]?`<div class="meta">${SIZE_NOTE[i.id]}</div>`:''}
+    <div class="price"><span class="php">${peso(php(i.thb))}</span></div>
+    <div class="slots ${slotCls}">${slotTxt}</div>${controls}</div></article>`;
+}
+
+function renderGrid(){
+  const list = tab==='fancon'?FANCON:SHOP;
+  document.getElementById('grid').innerHTML = list.map(itemCard).join('');
+  document.getElementById('shopnote').classList.toggle('hidden',tab!=='shop');
+  document.getElementById('tabnote').textContent = tab==='fancon'
+    ? 'Official Milk Love Whimsical House Fancon merchandise, bought at the booth on Nov 15.'
+    : 'In-stock MuvMuv & MilkLove items from the GMMTV Shop. Order them on their own, or pick one as a backup.';
+}
+
+function lines(){
+  const out=[];
+  for(const k in bag){ if(!bag[k]) continue; const [id,size]=k.split('|'); const i=ALL[id];
+    out.push({k,i,size,qty:bag[k],unit:php(i.thb),total:php(i.thb)*bag[k]}); }
+  const order=Object.keys(ALL); out.sort((a,b)=>order.indexOf(a.i.id)-order.indexOf(b.i.id));
+  return out;
+}
+
+function renderSummary(){
+  const ls=lines(); const n=ls.reduce((a,l)=>a+l.qty,0); const tot=ls.reduce((a,l)=>a+l.total,0);
+  document.getElementById('bartext').innerHTML = `${n} item${n===1?'':'s'} · ${peso(tot)}<small>Shipping billed separately</small>`;
+  const el=document.getElementById('sum');
+  if(!ls.length){el.innerHTML='<p style="color:var(--muted);font-size:14px">Your bag is empty. Add items to get started.</p>';return}
+  el.innerHTML='<table>'+ls.map(l=>`<tr><td>${l.qty} × ${l.i.name}${l.size?` (${l.size})`:''}<div class="meta" style="font-size:12px;color:var(--muted)">${peso(l.unit)} each</div></td><td class="r">${peso(l.total)}</td></tr>`).join('')+
+    `<tr class="tot"><td>Item total</td><td class="r">${peso(tot)}</td></tr></table><p style="font-size:12.5px;color:var(--muted);margin:6px 0 0">+ local shipping, billed when your order ships (from Nov 21).</p>`;
+}
+
+function swapOptions(sel){
+  return '<option value="">Choose a backup item…</option>'+SHOP.map(s=>`<option value="${s.id}" ${s.id===sel?'selected':''}>${s.name} — ${peso(php(s.thb))}</option>`).join('');
+}
+
+function renderPrefs(){
+  const ids=[...new Set(lines().map(l=>l.i.id))];
+  const el=document.getElementById('prefs');
+  if(!ids.length){el.innerHTML='<p style="color:var(--muted);font-size:14px">Add items above and your choices will show here.</p>';return}
+  el.innerHTML = ids.map(id=>{
+    const i=ALL[id]; const p=prefs[id]||(prefs[id]={mode:'refund',swap:''});
+    const canSwap = i.src==='fancon';
+    return `<div class="pref"><div class="nm">${i.name}</div><div class="radios">
+      <label><input type="radio" name="p_${id}" value="refund" ${p.mode==='refund'?'checked':''}> Full refund</label>
+      ${canSwap?`<label><input type="radio" name="p_${id}" value="swap" ${p.mode==='swap'?'checked':''}> Swap for a GMMTV Shop item</label>`:''}
+    </div>${canSwap&&p.mode==='swap'?`<select data-swap="${id}" aria-label="Backup item for ${i.name}">${swapOptions(p.swap)}</select>`:''}
+    ${!canSwap?'<div class="meta" style="font-size:12.5px;color:var(--muted);margin-top:4px">GMMTV Shop items are refunded in full if sold out.</div>':''}</div>`;
+  }).join('');
+}
+
+function renderAll(){renderGrid();renderSummary();renderPrefs()}
+
+document.getElementById('grid').addEventListener('click',e=>{
+  const b=e.target.closest('button[data-k]'); if(!b) return;
+  const k=b.dataset.k, d=+b.dataset.d, id=k.split('|')[0], i=ALL[id];
+  if(d>0 && qtyOf(id)>=left(i)) return;
+  bag[k]=Math.max(0,(bag[k]||0)+d); if(!bag[k]) delete bag[k];
+  renderAll();
+});
+document.querySelectorAll('.tabs button').forEach(b=>b.addEventListener('click',()=>{
+  tab=b.dataset.tab; document.querySelectorAll('.tabs button').forEach(x=>x.classList.toggle('on',x===b)); renderGrid();
+}));
+document.getElementById('prefs').addEventListener('change',e=>{
+  const t=e.target;
+  if(t.type==='radio'){const id=t.name.slice(2); prefs[id].mode=t.value; renderPrefs();}
+  if(t.dataset.swap){prefs[t.dataset.swap].swap=t.value;}
+});
+
+const $=id=>document.getElementById(id).value.trim();
+function makeId(){const c='ABCDEFGHJKMNPQRSTUVWXYZ23456789';let s='';const a=new Uint32Array(5);(crypto||window.msCrypto).getRandomValues(a);a.forEach(x=>s+=c[x%c.length]);return 'CSB-'+s}
+
+document.getElementById('form').addEventListener('submit',e=>{
+  e.preventDefault();
+  const err=document.getElementById('err'); err.textContent='';
+  const showErr=()=>{ if(err.textContent && lines().length && !document.activeElement.closest('#form')) err.scrollIntoView({behavior:'smooth',block:'center'}); };
+  setTimeout(showErr,0);
+  const ls=lines();
+  if(!ls.length){err.textContent='Please add at least one item to your bag.';document.getElementById('shop').scrollIntoView({behavior:'smooth'});return}
+  const req=['f-name','f-handle','f-mobile','f-street','f-brgy','f-city','f-prov','f-zip','f-gname'];
+  const miss=req.filter(id=>!$(id));
+  if(miss.length){err.textContent='Please fill in all required fields.';document.getElementById(miss[0]).focus();return}
+  if(!/^(\+?63|0)9\d{9}$/.test($('f-mobile').replace(/[\s-]/g,''))){err.textContent='Please enter a valid PH mobile number (e.g. 0917 123 4567).';document.getElementById('f-mobile').focus();return}
+  if(!document.getElementById('c1').checked||!document.getElementById('c2').checked){err.textContent='Please tick both boxes to confirm.';return}
+  for(const id in prefs){ if(prefs[id].mode==='swap' && !prefs[id].swap && ls.some(l=>l.i.id===id)){err.textContent='Pick a backup item for each swap, or choose refund.';return} }
+  const tot=ls.reduce((a,l)=>a+l.total,0); const oid=makeId();
+  const ids=[...new Set(ls.map(l=>l.i.id))];
+  const prefTxt=ids.map(id=>{const p=prefs[id]||{mode:'refund'};return `- ${ALL[id].name}: ${p.mode==='swap'?'SWAP for '+ALL[p.swap].name+' ('+peso(php(ALL[p.swap].thb))+', difference settled)':'FULL REFUND'}`}).join('\n');
+  const txt=`CASIMIR PASA"BUY" ORDER ${oid}
+MilkLove Fancon / MuvMuv · Bangkok Nov 2026
+
+ITEMS
+${ls.map(l=>`- ${l.qty} x ${l.i.name}${l.size?' ('+l.size+')':''} @ ${peso(l.unit)} = ${peso(l.total)}`).join('\n')}
+ITEM TOTAL: ${peso(tot)} (shipping billed separately)
+
+IF SOLD OUT
+${prefTxt}
+${$('f-req')?'\nSPECIAL REQUEST\n'+$('f-req')+'\n':''}
+BUYER
+Name: ${$('f-name')}
+IG/TikTok: ${$('f-handle')}
+Mobile: ${$('f-mobile')}${$('f-email')?'\nEmail: '+$('f-email'):''}
+
+SHIP TO
+${$('f-street')}, Brgy. ${$('f-brgy')}, ${$('f-city')}, ${$('f-prov')} ${$('f-zip')}
+Courier: ${$('f-courier')}
+
+PAYMENT (GCash, full payment)
+Account name: ${$('f-gname')}
+Reference no.: ${$('f-ref')||'(will send after paying)'}
+Agreed: no cancellation after purchase; random items as-is; pay by Nov 14; shipping paid separately.`;
+  document.getElementById('oid').textContent=oid;
+  document.getElementById('otext').textContent=txt;
+  document.getElementById('copymsg').textContent='';document.getElementById('sent').checked=false;document.getElementById('donebox').classList.add('hidden');
+  document.getElementById('modal').classList.add('on');
+});
+function copyOrder(){
+  const m=document.getElementById('copymsg'); const txt=document.getElementById('otext').textContent;
+  const fallback=()=>{const pre=document.getElementById('otext');pre.closest('details').open=true;const r=document.createRange();r.selectNodeContents(pre);const s=getSelection();s.removeAllRanges();s.addRange(r);m.textContent='Copy the highlighted message, then paste it in your DM to @csmrzrzr.'};
+  try{ navigator.clipboard.writeText(txt).then(()=>{m.textContent='Message copied! Paste it in the chat with @csmrzrzr and send.'},fallback); }catch(_){fallback()}
+}
+document.getElementById('copy').addEventListener('click',copyOrder);
+document.getElementById('go-ig').addEventListener('click',copyOrder);
+document.getElementById('go-tt').addEventListener('click',copyOrder);
+document.getElementById('sent').addEventListener('change',e=>{document.getElementById('oid2').textContent=document.getElementById('oid').textContent;document.getElementById('donebox').classList.toggle('hidden',!e.target.checked)});
+document.getElementById('bar-go').addEventListener('click',()=>{
+  const f=document.getElementById('form');
+  if(f.requestSubmit) f.requestSubmit(); else f.dispatchEvent(new Event('submit',{cancelable:true}));
+});
+document.getElementById('close').addEventListener('click',()=>document.getElementById('modal').classList.remove('on'));
+document.getElementById('modal').addEventListener('click',e=>{if(e.target.id==='modal')e.target.classList.remove('on')});
+renderAll();
+
+</script>
+</body>
+</html>
