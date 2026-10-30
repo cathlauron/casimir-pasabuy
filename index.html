@@ -286,7 +286,7 @@ const RATE = 1.92;     // pesos per baht (locked)
 const MARKUP = 0.12;   // service fee
 /* "taken" = slots already confirmed/paid. Update as orders come in. */
 const FANCON = [
-  {id:'card',  name:'Collectible Random Card', thb:200, max:10, taken:0, meta:'5.5 × 8.5 cm · random 10 of 35 cards per pack', tag:'Random'},
+  {id:'card',  name:'Collectible Random Card', thb:200, fixed:550, max:10, taken:0, meta:'5.5 × 8.5 cm · random 10 of 35 cards per pack', tag:'Random'},
   {id:'tps',   name:'Transparent Photo Set', thb:390, max:10, taken:0, meta:'4 transparent photocards, 2 photo strips, 1 photo keychain'},
   {id:'talkie',name:'Talkie MuvMuv Doll Keychain', thb:990, max:5, taken:0, meta:'17 cm · 14 voice messages · replaceable battery'},
   {id:'holder',name:'MuvMuv Card Holder with Photocard', thb:350, max:5, taken:0, meta:'12 × 14.7 cm · photocard 5.5 × 8.5 cm'},
@@ -318,6 +318,7 @@ const PRISTINE = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
 const SLOTS = (()=>{try{return JSON.parse(document.getElementById('slots-state').textContent.replace('/*SLOTS*/','').replace('/*/SLOTS*/',''))||{}}catch(_){return {}}})();
 const SIZE_NOTE = {s_pajamas:'Size options vary. Tell us your size in the special request box.'};
 
+const price = i => i.fixed || php(i.thb);
 const php = thb => Math.ceil(Math.round(thb*RATE*(1+MARKUP)*100)/100);
 const peso = n => '₱' + n.toLocaleString('en-PH');
 const baht = n => '฿' + n.toLocaleString('en-US');
@@ -347,7 +348,7 @@ function itemCard(i){
   return `<article class="item ${q?'inbag':''}">
     <div class="ph"><img src="${img}" alt="${i.name}" loading="lazy"></div>
     <div class="bd">${tag}<h3>${i.name}</h3>${i.meta?`<div class="meta">${i.meta}</div>`:''}${SIZE_NOTE[i.id]?`<div class="meta">${SIZE_NOTE[i.id]}</div>`:''}
-    <div class="price"><span class="php">${peso(php(i.thb))}</span></div>
+    <div class="price"><span class="php">${peso(price(i))}</span></div>
     <div class="slots ${slotCls}">${slotTxt}</div>${controls}</div></article>`;
 }
 
@@ -363,7 +364,7 @@ function renderGrid(){
 function lines(){
   const out=[];
   for(const k in bag){ if(!bag[k]) continue; const [id,size]=k.split('|'); const i=ALL[id];
-    out.push({k,i,size,qty:bag[k],unit:php(i.thb),total:php(i.thb)*bag[k]}); }
+    out.push({k,i,size,qty:bag[k],unit:price(i),total:price(i)*bag[k]}); }
   const order=Object.keys(ALL); out.sort((a,b)=>order.indexOf(a.i.id)-order.indexOf(b.i.id));
   return out;
 }
@@ -378,7 +379,7 @@ function renderSummary(){
 }
 
 function swapOptions(sel){
-  return '<option value="">Choose a backup item…</option>'+SHOP.map(s=>`<option value="${s.id}" ${s.id===sel?'selected':''}>${s.name} — ${peso(php(s.thb))}</option>`).join('');
+  return '<option value="">Choose a backup item…</option>'+SHOP.map(s=>`<option value="${s.id}" ${s.id===sel?'selected':''}>${s.name} — ${peso(price(s))}</option>`).join('');
 }
 
 function renderPrefs(){
@@ -432,7 +433,7 @@ document.getElementById('form').addEventListener('submit',e=>{
   for(const id in prefs){ if(prefs[id].mode==='swap' && !prefs[id].swap && ls.some(l=>l.i.id===id)){err.textContent='Pick a backup item for each swap, or choose refund.';return} }
   const tot=ls.reduce((a,l)=>a+l.total,0); const oid=makeId();
   const ids=[...new Set(ls.map(l=>l.i.id))];
-  const prefTxt=ids.map(id=>{const p=prefs[id]||{mode:'refund'};return `- ${ALL[id].name}: ${p.mode==='swap'?'SWAP for '+ALL[p.swap].name+' ('+peso(php(ALL[p.swap].thb))+', difference settled)':'FULL REFUND'}`}).join('\n');
+  const prefTxt=ids.map(id=>{const p=prefs[id]||{mode:'refund'};return `- ${ALL[id].name}: ${p.mode==='swap'?'SWAP for '+ALL[p.swap].name+' ('+peso(price(ALL[p.swap]))+', difference settled)':'FULL REFUND'}`}).join('\n');
   const txt=`CASIMIR PASA"BUY" ORDER ${oid}
 MilkLove Fancon / MuvMuv · Bangkok Nov 2026
 
