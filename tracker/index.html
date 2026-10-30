@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Casimir Pasa"buy" · Order Tracker</title>
+<meta name="robots" content="noindex,nofollow">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--mint:#dff3e6;--mint-2:#bfe6cc;--mint-ink:#2f7a52;--pink:#ffe3ec;--pink-2:#ffb8cf;--pink-ink:#d9437a;--cream:#fffaf6;--ink:#3a2f36;--muted:#7c6d75;--line:#f1dce4;--warn:#c9622b}
+*{box-sizing:border-box}
+body{margin:0;font-family:Nunito,system-ui,sans-serif;color:var(--ink);background:var(--cream)}
+h1,h2,h3{font-family:Fredoka,Nunito,sans-serif;margin:0}
+.wrap{max-width:1280px;margin:0 auto;padding:18px}
+header{display:flex;align-items:center;gap:12px;flex-wrap:wrap;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:10px}
+.brand img{width:48px;height:48px;border-radius:50%;border:2px solid #fff;box-shadow:0 2px 6px rgba(120,60,90,.15)}
+.brand h1{font-size:24px;color:var(--pink-ink)}
+.brand p{margin:0;font-size:13px;color:var(--muted)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin:16px 0}
+.stat{background:#fff;border:1.5px solid var(--line);border-radius:16px;padding:12px 14px}
+.stat .l{font-size:12.5px;color:var(--muted);font-weight:700}
+.stat .v{font-family:Fredoka;font-size:24px;font-weight:700;margin-top:2px}
+.stat .s{font-size:12px;color:var(--muted)}
+.card{background:#fff;border:1.5px solid var(--line);border-radius:18px;padding:16px;margin:14px 0}
+.tabs{display:inline-flex;background:#fff;border:1.5px solid var(--line);border-radius:999px;padding:4px;gap:2px}
+.tabs button{border:0;background:none;font:700 14px Nunito;padding:8px 14px;border-radius:999px;cursor:pointer;color:var(--muted)}
+.tabs button.on{background:var(--pink-ink);color:#fff}
+.btn{display:inline-flex;align-items:center;gap:6px;border:0;border-radius:999px;padding:10px 16px;font:800 14px Nunito;cursor:pointer;background:var(--pink-ink);color:#fff}
+.btn.ghost{background:#fff;color:var(--pink-ink);border:1.5px solid var(--pink-2)}
+.btn.mint{background:var(--mint-ink)}
+.btn.sm{padding:6px 11px;font-size:12.5px}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+textarea,input,select{font:14px Nunito;padding:8px 10px;border:1.5px solid var(--line);border-radius:10px;background:#fff;color:var(--ink);width:100%}
+textarea{min-height:110px;resize:vertical}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--pink-2);box-shadow:0 0 0 3px var(--pink)}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.msg{font-size:13.5px;font-weight:700;min-height:1em;margin-top:8px}
+.msg.ok{color:var(--mint-ink)}.msg.bad{color:#c0392b}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:10px}
+.toolbar input{max-width:280px}.toolbar select{max-width:200px}
+.tbl{overflow:auto;border:1.5px solid var(--line);border-radius:14px;background:#fff}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th{position:sticky;top:0;background:var(--mint);text-align:left;font-size:12px;text-transform:uppercase;letter-spacing:.3px;color:var(--mint-ink);padding:9px 10px;white-space:nowrap;z-index:1}
+td{padding:8px 10px;border-top:1px solid var(--line);vertical-align:top}
+tr.main{cursor:pointer}
+tr.main:hover td{background:#fffafc}
+tr.open td{background:#fff5f8}
+.oid{font-family:Fredoka;font-weight:700;color:var(--pink-ink);white-space:nowrap}
+.pill{display:inline-block;padding:3px 9px;border-radius:999px;font-size:12px;font-weight:800;white-space:nowrap}
+.p-await{background:#eee;color:#666}.p-unpaid{background:#fff1d6;color:#8a5a00}.p-paid{background:var(--mint);color:var(--mint-ink)}.p-cancel{background:#f3e3e7;color:#9a6b78}
+.b-no{background:#eee;color:#666}.b-yes{background:var(--mint);color:var(--mint-ink)}.b-part{background:#fff1d6;color:#8a5a00}.b-out{background:#fde0e0;color:#b03535}
+.r-none{color:var(--muted)}.r-pend{background:#fde0e0;color:#b03535}.r-done{background:var(--mint);color:var(--mint-ink)}
+.s-no{background:#eee;color:#666}.s-pack{background:#fff1d6;color:#8a5a00}.s-ship{background:#e1ecff;color:#2c5aa0}.s-del{background:var(--mint);color:var(--mint-ink)}
+.items{font-size:12.5px;color:var(--muted);max-width:280px}
+.detail{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;padding:6px 2px 10px}
+.detail h3{font-size:15px;color:var(--mint-ink);margin-bottom:6px}
+.detail label{display:block;font-size:12px;font-weight:800;color:var(--muted);margin:8px 0 3px}
+.detail .ro{font-size:13.5px;white-space:pre-wrap}
+.detail ul{margin:0;padding-left:18px;font-size:13.5px}
+.empty{padding:28px;text-align:center;color:var(--muted)}
+.right{text-align:right;white-space:nowrap}
+.hidden{display:none!important}
+.saving{font-size:12px;color:var(--muted)}
+.blist td{font-size:14px}
+.notice{background:var(--pink);border:1.5px dashed var(--pink-2);border-radius:14px;padding:14px;font-size:14px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div class="brand"><img src="img/avatar.png" alt=""><div><h1>Order Tracker</h1><p>Casimir Pasa"buy" · MilkLove Fancon &amp; MuvMuv · <span id="who">private</span> <button class="btn ghost sm hidden" id="signout" style="margin-left:6px">Sign out</button></p></div></div>
+  <div class="tabs" role="tablist">
+    <button class="on" data-tab="orders">Orders</button>
+    <button data-tab="buy">Buying list</button>
+  </div>
+</header>
+
+<div id="gate" class="card" style="max-width:460px;margin:40px auto;text-align:center">
+  <h2 style="font-size:22px;margin-bottom:6px">🔒 Sign in to the tracker</h2>
+  <p id="gatemsg" style="font-size:14px;color:var(--muted);margin:0 0 14px">Only Casimir Pasa"buy" admins can see orders.</p>
+  <button class="btn" id="signin">Sign in with Google</button>
+</div>
+<div id="app" class="hidden">
+
+<div class="stats" id="stats"></div>
+
+<div id="tab-orders">
+  <div class="card">
+    <h2 style="font-size:19px;margin-bottom:4px">Add an order</h2>
+    <p style="margin:0 0 8px;font-size:13.5px;color:var(--muted)">Paste the order message a buyer sent you in their DM. It fills in everything automatically.</p>
+    <textarea id="paste" placeholder='CASIMIR PASA"BUY" ORDER CSB-XXXXX …'></textarea>
+    <div class="row" style="margin-top:8px">
+      <button class="btn" id="add">Add order from message</button>
+      <button class="btn ghost" id="addblank">Add blank order</button>
+    </div>
+    <div class="msg" id="addmsg"></div>
+  </div>
+
+  <div class="toolbar">
+    <input id="q" type="search" placeholder="Search ID, name, handle…">
+    <select id="fpay"><option value="">All payments</option></select>
+    <select id="fship"><option value="">All shipping</option></select>
+    <select id="frefund"><option value="">All refunds</option></select>
+    <button class="btn ghost sm" id="csv">Copy as CSV</button>
+    <span class="saving" id="saving"></span>
+  </div>
+  <div class="tbl"><table>
+    <thead><tr><th>Order ID</th><th>Buyer</th><th>Items</th><th class="right">Item total</th><th>Payment</th><th class="right">Paid</th><th>Purchase</th><th>Refund</th><th>Shipping</th></tr></thead>
+    <tbody id="rows"><tr><td colspan="9" class="empty">Loading orders…</td></tr></tbody>
+  </table></div>
+  <textarea id="csvout" class="hidden" style="margin-top:10px" readonly></textarea>
+</div>
+
+<div id="tab-buy" class="hidden">
+  <div class="card">
+    <h2 style="font-size:19px;margin-bottom:4px">What to buy</h2>
+    <p style="margin:0 0 10px;font-size:13.5px;color:var(--muted)">Totals from all orders that aren't cancelled. <b>Paid</b> is what you must buy; <b>Not paid yet</b> is still waiting on GCash.</p>
+    <div class="tbl"><table class="blist"><thead><tr><th>Item</th><th class="right">Paid</th><th class="right">Not paid yet</th><th class="right">Total</th></tr></thead><tbody id="buyrows"></tbody></table></div>
+  </div>
+</div>
+</div>
+</div>
+
+<script>
+const PAY=['Awaiting confirmation','Confirmed – unpaid','Paid','Cancelled'];
+const PAYC={'Awaiting confirmation':'p-await','Confirmed – unpaid':'p-unpaid','Paid':'p-paid','Cancelled':'p-cancel'};
+const BUY=['Not bought yet','Bought','Partially bought','Sold out'];
+const BUYC={'Not bought yet':'b-no','Bought':'b-yes','Partially bought':'b-part','Sold out':'b-out'};
+const REF=['None','Pending','Refunded'];
+const REFC={'None':'r-none','Pending':'r-pend','Refunded':'r-done'};
+const SHIP=['Not shipped','Packed','Shipped','Delivered'];
+const SHIPC={'Not shipped':'s-no','Packed':'s-pack','Shipped':'s-ship','Delivered':'s-del'};
+for(const [id,list] of [['fpay',PAY],['fship',SHIP],['frefund',REF]]) document.getElementById(id).insertAdjacentHTML('beforeend',list.map(v=>`<option>${v}</option>`).join(''));
+
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const peso=n=>'₱'+(Number(n)||0).toLocaleString('en-PH');
+const num=s=>Number(String(s||'').replace(/[^\d.]/g,''))||0;
+
+let db=null, store=null, orders=[], openId=null, tab='orders';
+
+/* ---------- parse the order message from the order page ---------- */
+function parseOrder(text){
+  const L=text.replace(/\r/g,'').split('\n');
+  const m=text.match(/ORDER\s+(CSB-[A-Z0-9]+)/i); if(!m) return null;
+  const o={oid:m[1].toUpperCase(),items:[],prefs:[],request:'',address:'',raw:text.trim()};
+  let sec='';
+  const heads={'ITEMS':'items','IF SOLD OUT':'prefs','SPECIAL REQUEST':'req','BUYER':'buyer','SHIP TO':'ship'};
+  for(const raw of L){
+    const line=raw.trim(); if(!line) continue;
+    if(heads[line]){sec=heads[line];continue}
+    if(/^PAYMENT/i.test(line)){sec='pay';continue}
+    let mm;
+    if((mm=line.match(/^ITEM TOTAL:\s*₱?([\d,]+)/i))){o.itemTotal=num(mm[1]);continue}
+    if(sec==='items' && (mm=line.match(/^-\s*(\d+)\s*x\s*(.+?)\s*@\s*₱([\d,]+)\s*=\s*₱([\d,]+)/))){
+      let name=mm[2], size=''; const sm=name.match(/^(.*) \((S|M|L|XL|XXL)\)$/); if(sm){name=sm[1];size=sm[2]}
+      o.items.push({qty:+mm[1],name,size,unit:num(mm[3]),total:num(mm[4])});continue}
+    if(sec==='prefs' && line.startsWith('-')){o.prefs.push(line.slice(1).trim());continue}
+    if(sec==='req'){o.request+=(o.request?'\n':'')+line;continue}
+    if(sec==='buyer'){
+      if((mm=line.match(/^Name:\s*(.*)/))) o.buyer=mm[1];
+      else if((mm=line.match(/^IG\/TikTok:\s*(.*)/))) o.handle=mm[1];
+      else if((mm=line.match(/^Mobile:\s*(.*)/))) o.mobile=mm[1];
+      else if((mm=line.match(/^Email:\s*(.*)/))) o.email=mm[1];
+      continue}
+    if(sec==='ship'){ if((mm=line.match(/^Courier:\s*(.*)/))) o.courier=mm[1]; else o.address+=(o.address?' ':'')+line; continue}
+    if(sec==='pay'){
+      if((mm=line.match(/^Account name:\s*(.*)/))) o.gname=mm[1];
+      else if((mm=line.match(/^Reference no\.:\s*(.*)/))) o.gcashRef=/will send/i.test(mm[1])?'':mm[1];
+    }
+  }
+  if(!o.itemTotal) o.itemTotal=o.items.reduce((a,i)=>a+i.total,0);
+  return o;
+}
+function blank(o){return Object.assign({oid:'',created:new Date().toISOString(),buyer:'',handle:'',mobile:'',email:'',address:'',courier:'',items:[],itemTotal:0,prefs:[],request:'',gname:'',
+  payStatus:'Awaiting confirmation',amountPaid:0,gcashRef:'',buyStatus:'Not bought yet',refundDue:0,refundStatus:'None',refundRef:'',swapNotes:'',
+  shipFee:0,shipFeePaid:false,shipStatus:'Not shipped',tracking:'',notes:'',raw:''},o)}
+
+/* ---------- rendering ---------- */
+function renderStats(){
+  const live=orders.filter(o=>o.payStatus!=='Cancelled');
+  const expected=live.reduce((a,o)=>a+(o.itemTotal||0),0);
+  const paid=live.reduce((a,o)=>a+(Number(o.amountPaid)||0),0);
+  const unpaid=live.filter(o=>o.payStatus!=='Paid').length;
+  const refP=orders.filter(o=>o.refundStatus==='Pending'); const refAmt=refP.reduce((a,o)=>a+(Number(o.refundDue)||0),0);
+  const toShip=live.filter(o=>o.payStatus==='Paid'&&o.buyStatus!=='Sold out'&&o.shipStatus!=='Shipped'&&o.shipStatus!=='Delivered').length;
+  const shipOwed=live.filter(o=>(Number(o.shipFee)||0)>0&&!o.shipFeePaid).reduce((a,o)=>a+(Number(o.shipFee)||0),0);
+  document.getElementById('stats').innerHTML=[
+    ['Orders',live.length,`${orders.length-live.length} cancelled`],
+    ['GCash received',peso(paid),`of ${peso(expected)} expected`],
+    ['Not paid yet',unpaid,'orders waiting on payment'],
+    ['Refunds pending',peso(refAmt),`${refP.length} order${refP.length===1?'':'s'} · due by Nov 16`],
+    ['To ship',toShip,'paid orders not shipped'],
+    ['Shipping fees unpaid',peso(shipOwed),'billed, not yet paid']
+  ].map(([l,v,s])=>`<div class="stat"><div class="l">${l}</div><div class="v">${v}</div><div class="s">${s}</div></div>`).join('');
+}
+function itemsShort(o){return (o.items||[]).map(i=>`${i.qty}× ${i.name}${i.size?' ('+i.size+')':''}`).join(', ')||'—'}
+function filtered(){
+  const q=document.getElementById('q').value.trim().toLowerCase();
+  const fp=document.getElementById('fpay').value, fs=document.getElementById('fship').value, fr=document.getElementById('frefund').value;
+  return orders.filter(o=>(!fp||o.payStatus===fp)&&(!fs||o.shipStatus===fs)&&(!fr||o.refundStatus===fr)&&
+    (!q||[o.oid,o.buyer,o.handle,o.mobile,o.gname].join(' ').toLowerCase().includes(q)));
+}
+function sel(f,list,v){return `<select data-f="${f}">${list.map(x=>`<option ${x===v?'selected':''}>${x}</option>`).join('')}</select>`}
+function inp(f,v,type='text',ph=''){return `<input data-f="${f}" type="${type}" value="${esc(v)}" placeholder="${esc(ph)}" ${type==='number'?'min="0" step="1"':''}>`}
+function detailHTML(o){
+  return `<div class="detail" data-id="${esc(o.oid)}">
+    <div><h3>Buyer</h3>
+      <label>Name</label>${inp('buyer',o.buyer)}
+      <label>IG / TikTok</label>${inp('handle',o.handle)}
+      <label>Mobile</label>${inp('mobile',o.mobile)}
+      <label>Email</label>${inp('email',o.email)}
+      <label>Ship to</label>${inp('address',o.address)}
+      <label>Courier</label>${inp('courier',o.courier)}</div>
+    <div><h3>Items · ${peso(o.itemTotal)}</h3>
+      <ul>${(o.items||[]).map(i=>`<li>${i.qty}× ${esc(i.name)}${i.size?' ('+esc(i.size)+')':''} — ${peso(i.total)}</li>`).join('')||'<li>No items parsed</li>'}</ul>
+      <label>Item total (₱)</label>${inp('itemTotal',o.itemTotal,'number')}
+      <label>If sold out</label><div class="ro">${esc((o.prefs||[]).join('\n'))||'—'}</div>
+      ${o.request?`<label>Special request</label><div class="ro">${esc(o.request)}</div>`:''}</div>
+    <div><h3>Payment</h3>
+      <label>Status</label>${sel('payStatus',PAY,o.payStatus)}
+      <label>Amount received (₱)</label>${inp('amountPaid',o.amountPaid,'number')}
+      <label>GCash account name</label>${inp('gname',o.gname)}
+      <label>GCash reference no.</label>${inp('gcashRef',o.gcashRef)}
+      <h3 style="margin-top:14px">Purchase</h3>
+      <label>Status at booth / shop</label>${sel('buyStatus',BUY,o.buyStatus)}
+      <label>Swap notes</label>${inp('swapNotes',o.swapNotes,'text','e.g. tee → hoodie blanket, +₱1,592')}</div>
+    <div><h3>Refund</h3>
+      <label>Status</label>${sel('refundStatus',REF,o.refundStatus)}
+      <label>Refund due (₱)</label>${inp('refundDue',o.refundDue,'number')}
+      <label>Refund GCash ref.</label>${inp('refundRef',o.refundRef)}
+      <h3 style="margin-top:14px">Shipping</h3>
+      <label>Status</label>${sel('shipStatus',SHIP,o.shipStatus)}
+      <label>Shipping fee (₱)</label>${inp('shipFee',o.shipFee,'number')}
+      <label style="display:flex;gap:8px;align-items:center"><input data-f="shipFeePaid" type="checkbox" style="width:auto" ${o.shipFeePaid?'checked':''}> Shipping fee paid</label>
+      <label>Tracking no.</label>${inp('tracking',o.tracking)}</div>
+    <div style="grid-column:1/-1"><label>Notes</label>${inp('notes',o.notes,'text','Anything to remember')}
+      <div class="row" style="margin-top:10px;justify-content:space-between">
+        <span class="saving">Added ${o.created?new Date(o.created).toLocaleString('en-PH',{dateStyle:'medium',timeStyle:'short'}):''}</span>
+        <button class="btn ghost sm" data-del="${esc(o.oid)}">Delete order</button></div></div>
+  </div>`;
+}
+function renderRows(){
+  const list=filtered(); const tb=document.getElementById('rows');
+  if(!orders.length){tb.innerHTML='<tr><td colspan="9" class="empty">No orders yet. Paste a buyer\'s order message above to add the first one.</td></tr>';return}
+  if(!list.length){tb.innerHTML='<tr><td colspan="9" class="empty">No orders match these filters.</td></tr>';return}
+  tb.innerHTML=list.map(o=>`<tr class="main ${openId===o.oid?'open':''}" data-open="${esc(o.oid)}">
+    <td class="oid">${esc(o.oid)}</td><td><b>${esc(o.buyer)||'—'}</b><div class="items">${esc(o.handle)}</div></td>
+    <td class="items">${esc(itemsShort(o))}</td><td class="right">${peso(o.itemTotal)}</td>
+    <td><span class="pill ${PAYC[o.payStatus]||''}">${esc(o.payStatus)}</span></td><td class="right">${peso(o.amountPaid)}</td>
+    <td><span class="pill ${BUYC[o.buyStatus]||''}">${esc(o.buyStatus)}</span></td>
+    <td><span class="pill ${REFC[o.refundStatus]||''}">${o.refundStatus==='None'?'—':esc(o.refundStatus)+(o.refundDue?' · '+peso(o.refundDue):'')}</span></td>
+    <td><span class="pill ${SHIPC[o.shipStatus]||''}">${esc(o.shipStatus)}</span></td></tr>`+
+    (openId===o.oid?`<tr><td colspan="9">${detailHTML(o)}</td></tr>`:'')).join('');
+}
+function renderBuy(){
+  const t={};
+  for(const o of orders){ if(o.payStatus==='Cancelled') continue;
+    for(const i of o.items||[]){const k=i.name+(i.size?' ('+i.size+')':''); t[k]=t[k]||{paid:0,unpaid:0}; t[k][o.payStatus==='Paid'?'paid':'unpaid']+=i.qty;}}
+  const keys=Object.keys(t).sort();
+  document.getElementById('buyrows').innerHTML=keys.length?keys.map(k=>`<tr><td>${esc(k)}</td><td class="right"><b>${t[k].paid}</b></td><td class="right">${t[k].unpaid}</td><td class="right">${t[k].paid+t[k].unpaid}</td></tr>`).join(''):'<tr><td colspan="4" class="empty">No items yet.</td></tr>';
+}
+function renderAll(){renderStats();renderRows();renderBuy()}
+
+/* ---------- writes ---------- */
+const saving=s=>document.getElementById('saving').textContent=s;
+async function save(oid,patch){
+  if(!db) return; saving('Saving…');
+  try{await store.update(oid,patch); saving('Saved ✓')}
+  catch(e){ if(e&&e.code==='unavailable'){await new Promise(r=>setTimeout(r,700+Math.random()*600)); try{await store.update(oid,patch);saving('Saved ✓');return}catch(_){}} saving('Could not save: '+(e&&e.message||e)) }
+}
+const NUMF=['itemTotal','amountPaid','refundDue','shipFee'];
+document.getElementById('rows').addEventListener('click',e=>{
+  const del=e.target.closest('[data-del]');
+  if(del){ if(del.dataset.armed){ db&&store.del(del.dataset.del).catch(err=>saving('Could not delete: '+err.message)); openId=null; }
+    else { del.dataset.armed='1'; del.textContent='Click again to delete'; del.style.background='#c0392b';del.style.color='#fff'; } return; }
+  const tr=e.target.closest('tr.main'); if(!tr) return;
+  openId=openId===tr.dataset.open?null:tr.dataset.open; renderRows();
+});
+document.getElementById('rows').addEventListener('change',e=>{
+  const el=e.target; const f=el.dataset.f; if(!f) return; const box=el.closest('.detail'); if(!box) return; const oid=box.dataset.id;
+  let v=el.type==='checkbox'?el.checked:el.value; if(NUMF.includes(f)) v=num(v);
+  const o=orders.find(x=>x.oid===oid); if(!o||o[f]===v) return;
+  const patch={[f]:v};
+  // helpful automation
+  if(f==='payStatus'&&v==='Paid'&&!(Number(o.amountPaid)>0)) patch.amountPaid=o.itemTotal||0;
+  if(f==='buyStatus'&&v==='Sold out'){ if(o.refundStatus==='None') patch.refundStatus='Pending'; if(!(Number(o.refundDue)>0)) patch.refundDue=Number(o.amountPaid)||0; }
+  Object.assign(o,patch); renderStats(); save(oid,patch);
+});
+
+async function addOrder(o,msgEl){
+  if(!db){msgEl.className='msg bad';msgEl.textContent='Please sign in first.';return}
+  try{
+    if(await store.exists(o.oid)){msgEl.className='msg bad';msgEl.textContent=`${o.oid} is already in the tracker. Open it below to edit.`;openId=o.oid;renderRows();return}
+    await store.set(o.oid,blank(o)); msgEl.className='msg ok';msgEl.textContent=`Added ${o.oid} · ${o.buyer||'buyer'} · ${peso(o.itemTotal)}`;openId=o.oid;renderRows();
+    document.getElementById('paste').value='';
+  }catch(e){msgEl.className='msg bad';msgEl.textContent=(e&&e.code==='resource-exhausted')?'The tracker is full. Delete old orders to add more.':'Could not add: '+(e&&e.message||e)}
+}
+document.getElementById('add').addEventListener('click',()=>{
+  const msg=document.getElementById('addmsg'); const o=parseOrder(document.getElementById('paste').value);
+  if(!o){msg.className='msg bad';msg.textContent='No order ID found. Paste the whole message, starting with CASIMIR PASA"BUY" ORDER CSB-…';return}
+  if(!o.items.length){msg.className='msg bad';msg.textContent='Found the order ID but no items. Check the pasted message is complete.';return}
+  addOrder(o,msg);
+});
+document.getElementById('addblank').addEventListener('click',()=>{
+  const c='ABCDEFGHJKMNPQRSTUVWXYZ23456789';let s='';const a=new Uint32Array(5);crypto.getRandomValues(a);a.forEach(x=>s+=c[x%c.length]);
+  addOrder({oid:'CSB-'+s,raw:''},document.getElementById('addmsg'));
+});
+for(const id of ['q','fpay','fship','frefund']) document.getElementById(id).addEventListener('input',renderRows);
+document.querySelectorAll('.tabs button').forEach(b=>b.addEventListener('click',()=>{
+  tab=b.dataset.tab;document.querySelectorAll('.tabs button').forEach(x=>x.classList.toggle('on',x===b));
+  document.getElementById('tab-orders').classList.toggle('hidden',tab!=='orders');document.getElementById('tab-buy').classList.toggle('hidden',tab!=='buy');
+}));
+document.getElementById('csv').addEventListener('click',async()=>{
+  const cols=['oid','created','buyer','handle','mobile','email','address','courier','items','itemTotal','prefs','payStatus','amountPaid','gname','gcashRef','buyStatus','swapNotes','refundStatus','refundDue','refundRef','shipStatus','shipFee','shipFeePaid','tracking','notes'];
+  const cell=v=>'"'+String(v??'').replace(/"/g,'""')+'"';
+  const csv=[cols.join(',')].concat(orders.map(o=>cols.map(c=>cell(c==='items'?itemsShort(o):c==='prefs'?(o.prefs||[]).join(' | '):o[c])).join(','))).join('\n');
+  const out=document.getElementById('csvout'); out.value=csv; out.classList.remove('hidden');
+  try{await navigator.clipboard.writeText(csv);saving('CSV copied ✓ — paste into Google Sheets or Excel')}catch(_){out.select();saving('Select the text below and copy it')}
+});
+
+/* ---------- connect ---------- */
+renderAll();
+window.startTracker=(adapter)=>{ store=adapter; db=true;
+  store.subscribe(list=>{
+    orders=list.map(d=>Object.assign(blank({}),d)).sort((a,b)=>(b.created||'').localeCompare(a.created||''));
+    const a=document.activeElement; if(a&&a.closest&&a.closest('.detail')&&a.tagName==='INPUT'&&a.type!=='checkbox'){renderStats();renderBuy();return}
+    renderAll();
+  },err=>saving('Live updates stopped: '+(err&&err.message||err)));
+};
+</script>
+<script type="module">
+/* ===== Firebase settings (from your Firebase project) ===== */
+const firebaseConfig = {
+  "apiKey": "AIzaSyBsbruYJHNItc-CFcEqmHwLloCwIcDRHQg",
+  "authDomain": "casimir-pasabuy.firebaseapp.com",
+  "projectId": "casimir-pasabuy",
+  "storageBucket": "casimir-pasabuy.firebasestorage.app",
+  "messagingSenderId": "749921076169",
+  "appId": "1:749921076169:web:33a36733a6ea444a625e18"
+};
+const ADMINS = ["catherine.lauron26@gmail.com"];   // Google accounts allowed to use the tracker
+/* ========================================================== */
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithRedirect, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
+import { getFirestore, collection, doc, getDoc, setDoc, updateDoc, deleteDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
+const app=initializeApp(firebaseConfig), auth=getAuth(app), fs=getFirestore(app);
+const $=id=>document.getElementById(id);
+const gate=(msg)=>{$('gate').classList.remove('hidden');$('app').classList.add('hidden');$('signout').classList.add('hidden');if(msg)$('gatemsg').textContent=msg};
+$('signin').addEventListener('click',async()=>{const p=new GoogleAuthProvider();p.setCustomParameters({prompt:'select_account'});
+  try{await signInWithPopup(auth,p)}catch(e){ if(/popup/i.test(e.code||'')) await signInWithRedirect(auth,p); else gate('Sign-in failed: '+(e.code||e.message)); }});
+$('signout').addEventListener('click',()=>signOut(auth));
+let unsub=null;
+onAuthStateChanged(auth,user=>{
+  if(unsub){unsub();unsub=null}
+  if(!user){gate('Only Casimir Pasa"buy" admins can see orders.');return}
+  if(!ADMINS.includes((user.email||'').toLowerCase())){gate(user.email+' isn\'t an admin. Sign out and use your admin Google account.');$('signout').classList.remove('hidden');return}
+  $('gate').classList.add('hidden');$('app').classList.remove('hidden');$('signout').classList.remove('hidden');$('who').textContent='signed in as '+user.email;
+  const col=collection(fs,'orders');
+  window.startTracker({
+    subscribe:(cb,err)=>{unsub=onSnapshot(col,s=>cb(s.docs.map(d=>({...d.data(),oid:d.id}))),err)},
+    exists:async id=>(await getDoc(doc(col,id))).exists(),
+    set:(id,data)=>setDoc(doc(col,id),data),
+    update:(id,patch)=>updateDoc(doc(col,id),patch),
+    del:id=>deleteDoc(doc(col,id))
+  });
+});
+</script>
+</body>
+</html>
