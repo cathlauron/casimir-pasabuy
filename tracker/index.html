@@ -140,8 +140,21 @@ const num=s=>Number(String(s||'').replace(/[^\d.]/g,''))||0;
 let db=null, store=null, orders=[], openId=null, tab='orders';
 
 /* ---------- parse the order message from the order page ---------- */
+function cleanPaste(text){
+  return text.replace(/\r/g,'')
+    .replace(/\[([^\]]*)\]\((?:mailto:|tel:|https?:)[^)]*\)/gi,'$1')   // [x](mailto:x) -> x
+    .replace(/<(?:mailto:|tel:)([^>]*)>/gi,'$1')
+    .replace(/[​‎‏ ]/g,' ');
+}
+function splitOrders(text){
+  const t=cleanPaste(text); const idx=[]; const re=/CASIMIR\s+PASA\W{0,3}BUY\W{0,3}\s*ORDER\s+CSB-/gi; let m;
+  while((m=re.exec(t))) idx.push(m.index);
+  if(!idx.length) return t.match(/ORDER\s+CSB-/i)?[t]:[];
+  return idx.map((s,i)=>t.slice(s,idx[i+1]??t.length));
+}
+const BUL=/^[-•*·–—▪●◦]\s*/;
 function parseOrder(text){
-  const L=text.replace(/\r/g,'').split('\n');
+  const L=text.split('\n');
   const m=text.match(/ORDER\s+(CSB-[A-Z0-9]+)/i); if(!m) return null;
   const o={oid:m[1].toUpperCase(),items:[],prefs:[],request:'',address:'',raw:text.trim()};
   let sec='';
@@ -152,10 +165,10 @@ function parseOrder(text){
     if(/^PAYMENT/i.test(line)){sec='pay';continue}
     let mm;
     if((mm=line.match(/^ITEM TOTAL:\s*₱?([\d,]+)/i))){o.itemTotal=num(mm[1]);continue}
-    if(sec==='items' && (mm=line.match(/^-\s*(\d+)\s*x\s*(.+?)\s*@\s*₱([\d,]+)\s*=\s*₱([\d,]+)/))){
+    if(sec==='items' && (mm=line.replace(BUL,'').match(/^(\d+)\s*[x×]\s*(.+?)\s*@\s*₱\s*([\d,]+)\s*=\s*₱\s*([\d,]+)/i))){
       let name=mm[2], size=''; const sm=name.match(/^(.*) \((S|M|L|XL|XXL)\)$/); if(sm){name=sm[1];size=sm[2]}
       o.items.push({qty:+mm[1],name,size,unit:num(mm[3]),total:num(mm[4])});continue}
-    if(sec==='prefs' && line.startsWith('-')){o.prefs.push(line.slice(1).trim());continue}
+    if(sec==='prefs' && BUL.test(line)){o.prefs.push(line.replace(BUL,'').trim());continue}
     if(sec==='req'){o.request+=(o.request?'\n':'')+line;continue}
     if(sec==='buyer'){
       if((mm=line.match(/^Name:\s*(.*)/))) o.buyer=mm[1];
@@ -288,23 +301,47 @@ document.getElementById('rows').addEventListener('change',e=>{
   Object.assign(o,patch); renderStats(); save(oid,patch);
 });
 
-async function addOrder(o,msgEl){
+let pendingReplace=[];
+async function addOrders(list,msgEl){
   if(!db){msgEl.className='msg bad';msgEl.textContent='Please sign in first.';return}
-  try{
-    if(await store.exists(o.oid)){msgEl.className='msg bad';msgEl.textContent=`${o.oid} is already in the tracker. Open it below to edit.`;openId=o.oid;renderRows();return}
-    await store.set(o.oid,blank(o)); msgEl.className='msg ok';msgEl.textContent=`Added ${o.oid} · ${o.buyer||'buyer'} · ${peso(o.itemTotal)}`;openId=o.oid;renderRows();
-    document.getElementById('paste').value='';
-  }catch(e){msgEl.className='msg bad';msgEl.textContent=(e&&e.code==='resource-exhausted')?'The tracker is full. Delete old orders to add more.':'Could not add: '+(e&&e.message||e)}
+  const added=[],dupes=[],bad=[];
+  for(const o of list){
+    if(!o.items.length&&!o.blankOrder){bad.push(o.oid);continue} delete o.blankOrder;
+    try{ if(await store.exists(o.oid)){dupes.push(o);continue} await store.set(o.oid,blank(o)); added.push(o); }
+    catch(e){bad.push(o.oid+' ('+((e&&e.code==='resource-exhausted')?'tracker full':(e&&e.message||e))+')')}
+  }
+  pendingReplace=dupes;
+  let html='';
+  if(added.length) html+=`<div style="color:var(--mint-ink)">✓ Added ${added.length} order${added.length>1?'s':''}: ${added.map(o=>esc(o.oid)+' · '+esc(o.buyer||'buyer')+' · '+peso(o.itemTotal)).join('; ')}</div>`;
+  if(dupes.length) html+=`<div style="color:#8a5a00;margin-top:4px">Already in the tracker: ${dupes.map(o=>esc(o.oid)+' ('+esc(o.buyer||'?')+')').join(', ')}. <button class="btn ghost sm" id="replace">Replace with pasted version</button></div>`;
+  if(bad.length) html+=`<div style="color:#c0392b;margin-top:4px">Couldn't read items for: ${bad.map(esc).join(', ')}. Check those messages are complete.</div>`;
+  msgEl.className='msg'; msgEl.innerHTML=html;
+  if(added.length===1) openId=added[0].oid; else if(added.length) openId=null;
+  if(!dupes.length&&!bad.length) document.getElementById('paste').value='';
+  renderRows();
 }
+document.getElementById('addmsg').addEventListener('click',async e=>{
+  if(e.target.id!=='replace'||!pendingReplace.length) return;
+  const msgEl=document.getElementById('addmsg'); e.target.disabled=true;
+  const done=[];
+  for(const o of pendingReplace){
+    try{ const old=orders.find(x=>x.oid===o.oid)||{};
+      // keep your tracking fields (payment, refunds, shipping), replace the buyer's details and items
+      const keep={}; for(const f of ['created','payStatus','amountPaid','buyStatus','refundDue','refundStatus','refundRef','swapNotes','shipFee','shipFeePaid','shipStatus','tracking','notes']) if(old[f]!==undefined) keep[f]=old[f];
+      await store.set(o.oid,Object.assign(blank(o),keep)); done.push(o.oid);
+    }catch(err){}
+  }
+  pendingReplace=[]; msgEl.className='msg ok'; msgEl.textContent='Replaced '+done.join(', ')+' with the pasted version (your payment, refund and shipping updates were kept).';
+  document.getElementById('paste').value=''; renderRows();
+});
 document.getElementById('add').addEventListener('click',()=>{
-  const msg=document.getElementById('addmsg'); const o=parseOrder(document.getElementById('paste').value);
-  if(!o){msg.className='msg bad';msg.textContent='No order ID found. Paste the whole message, starting with CASIMIR PASA"BUY" ORDER CSB-…';return}
-  if(!o.items.length){msg.className='msg bad';msg.textContent='Found the order ID but no items. Check the pasted message is complete.';return}
-  addOrder(o,msg);
+  const msg=document.getElementById('addmsg'); const chunks=splitOrders(document.getElementById('paste').value);
+  if(!chunks.length){msg.className='msg bad';msg.textContent='No order ID found. Paste the whole message, starting with CASIMIR PASA"BUY" ORDER CSB-…';return}
+  addOrders(chunks.map(parseOrder).filter(Boolean),msg);
 });
 document.getElementById('addblank').addEventListener('click',()=>{
   const c='ABCDEFGHJKMNPQRSTUVWXYZ23456789';let s='';const a=new Uint32Array(5);crypto.getRandomValues(a);a.forEach(x=>s+=c[x%c.length]);
-  addOrder({oid:'CSB-'+s,raw:''},document.getElementById('addmsg'));
+  addOrders([{oid:'CSB-'+s,raw:'',items:[],itemTotal:0,blankOrder:true}],document.getElementById('addmsg'));
 });
 for(const id of ['q','fpay','fship','frefund']) document.getElementById(id).addEventListener('input',renderRows);
 document.querySelectorAll('.tabs button').forEach(b=>b.addEventListener('click',()=>{
