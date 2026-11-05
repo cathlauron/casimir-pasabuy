@@ -288,7 +288,7 @@ const RATE = 1.92;     // pesos per baht (locked)
 const MARKUP = 0.12;   // service fee
 /* "taken" = slots already confirmed/paid. Update as orders come in. */
 const FANCON = [
-  {id:'card',  name:'Collectible Random Card', thb:200, fixed:550, max:10, taken:0, meta:'5.5 × 8.5 cm · random 10 of 35 cards per pack', tag:'Random'},
+  {id:'card',  name:'Collectible Random Card', thb:200, fixed:550, closed:true, max:10, taken:0, meta:'5.5 × 8.5 cm · random 10 of 35 cards per pack', tag:'Random'},
   {id:'tps',   name:'Transparent Photo Set', thb:390, max:10, taken:0, meta:'4 transparent photocards, 2 photo strips, 1 photo keychain'},
   {id:'talkie',name:'Talkie MuvMuv Doll Keychain', thb:990, max:5, taken:0, meta:'17 cm · 14 voice messages · replaceable battery'},
   {id:'holder',name:'MuvMuv Card Holder with Photocard', thb:350, max:5, taken:0, meta:'12 × 14.7 cm · photocard 5.5 × 8.5 cm'},
@@ -330,13 +330,13 @@ const prefs = {}; // fancon id -> {mode:'refund'|'swap', swap:''}
 let tab = 'fancon';
 
 function qtyOf(id){let n=0;for(const k in bag){if(k.split('|')[0]===id)n+=bag[k]}return n}
-function left(i){const v=SLOTS[i.id];return Math.max(0, Number.isFinite(v)?v:i.max)}
+function left(i){if(i.closed)return 0;const v=SLOTS[i.id];return Math.max(0, Number.isFinite(v)?v:i.max)}
 
 function itemCard(i){
   const img = 'img/'+(i.src==='fancon'?i.id:'s_'+i.img)+'.jpg';
   const l = left(i), q = qtyOf(i.id);
   const slotCls = l===0?'out':(l<=2?'low':'');
-  const slotTxt = l===0?'Fully reserved':`${l} slot${l>1?'s':''} available`;
+  const slotTxt = i.closed?'⛔ Orders cut off for this item':l===0?'Fully reserved':`${l} slot${l>1?'s':''} available`;
   let controls;
   if(i.sizes){
     controls = '<div class="sizes">'+i.sizes.map(s=>{
@@ -346,8 +346,8 @@ function itemCard(i){
     const v=bag[i.id]||0;
     controls = `<div class="qty"><button type="button" data-k="${i.id}" data-d="-1" aria-label="Remove one" ${v?'':'disabled'}>−</button><span class="v">${v}</span><button type="button" data-k="${i.id}" data-d="1" aria-label="Add one" ${q<l?'':'disabled'}>+</button></div>`;
   }
-  const tag = i.tag?`<span class="tag pink">${i.tag}</span>`:(i.src==='fancon'?'<span class="tag">Fancon exclusive</span>':'<span class="tag">GMMTV Shop</span>');
-  return `<article class="item ${q?'inbag':''}">
+  const tag = i.closed?'<span class="tag" style="background:#3a2f36;color:#fff">Cut off</span>':i.tag?`<span class="tag pink">${i.tag}</span>`:(i.src==='fancon'?'<span class="tag">Fancon exclusive</span>':'<span class="tag">GMMTV Shop</span>');
+  return `<article class="item ${q?'inbag':''}" ${i.closed?'style="opacity:.6"':''}>
     <div class="ph"><img src="${img}" alt="${i.name}" loading="lazy"></div>
     <div class="bd">${tag}<h3>${i.name}</h3>${i.meta?`<div class="meta">${i.meta}</div>`:''}${SIZE_NOTE[i.id]?`<div class="meta">${SIZE_NOTE[i.id]}</div>`:''}
     <div class="price"><span class="php">${peso(price(i))}</span></div>
