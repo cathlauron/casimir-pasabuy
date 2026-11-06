@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8">
+<style>
+@font-face{font-family:Fredoka;font-weight:600;src:url(node_modules/@fontsource/fredoka/files/fredoka-latin-600-normal.woff2)}
+@font-face{font-family:Fredoka;font-weight:700;src:url(node_modules/@fontsource/fredoka/files/fredoka-latin-700-normal.woff2)}
+@font-face{font-family:Nunito;font-weight:700;src:url(node_modules/@fontsource/nunito/files/nunito-latin-700-normal.woff2)}
+@font-face{font-family:Nunito;font-weight:800;src:url(node_modules/@fontsource/nunito/files/nunito-latin-800-normal.woff2)}
+html,body{margin:0;padding:0}
+#p{position:relative;width:1080px;height:1345px;background:url(560f7764-image.png) 0 0/1080px 1345px no-repeat;overflow:hidden}
+.heart{position:absolute;transform:translate(-50%,-50%);width:104px;height:88px}
+.heart svg{position:absolute;inset:0;width:100%;height:100%;filter:drop-shadow(0 2px 3px rgba(200,60,120,.25))}
+.heart .t{position:absolute;left:0;right:0;top:25px;text-align:center;font:700 23px/1 Fredoka;color:#fff;letter-spacing:-.3px;transform:rotate(-6deg);text-shadow:0 1px 0 rgba(180,40,100,.25)}
+.heart .t.sm{font-size:19.5px;top:28px}
+.heart .t small{display:block;font-size:11px;letter-spacing:.5px;margin-top:2px}
+.spark{position:absolute;color:#fff;font:700 18px Fredoka}
+#box{position:absolute;left:500px;top:44px;width:533px;height:210px;border-radius:22px;background:#f3fbf5;border:2px solid #fff;box-shadow:0 4px 14px rgba(70,120,90,.12);box-sizing:border-box;padding:16px 18px;display:flex;gap:14px}
+#box .l{flex:1;display:flex;flex-direction:column}
+#box .head{display:flex;align-items:center;gap:10px}
+#box .head img{width:54px;height:54px;border-radius:50%;border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.12)}
+#box h1{margin:0;font:700 27px/1.05 Fredoka;color:#5f9e63;letter-spacing:.3px}
+#box h1 span{display:block;font:800 12px Nunito;color:#e0679a;letter-spacing:1.4px;margin-top:3px}
+#box .rows{margin-top:8px;font:800 14px/1.45 Nunito;color:#e0679a;letter-spacing:.2px}
+#box .rows b{color:#4d8a52}
+#box .url{margin-top:auto;font:800 13px Nunito;color:#fff;background:#e0679a;border-radius:999px;padding:5px 11px;align-self:flex-start;letter-spacing:.2px}
+#box .r{width:118px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px}
+#box .r img{width:112px;height:112px;border-radius:10px;background:#fff;padding:4px;box-sizing:border-box;border:1.5px solid #cfe9d6}
+#box .r div{font:800 11px Nunito;color:#4d8a52;text-align:center;letter-spacing:.6px}
+.pill{position:absolute;background:#fff;border:2px solid #f6a9c8;color:#e0679a;font:800 13px Nunito;letter-spacing:.8px;border-radius:999px;padding:5px 12px;white-space:nowrap}
+.cover{position:absolute;border-radius:10px}
+</style></head><body>
+<div id="p">
+  <div id="box">
+    <div class="l">
+      <div class="head"><img src="avatar.png"><h1>CASIMIR PASA"BUY"<span>PASABUY · PRICES IN PHILIPPINE PESO</span></h1></div>
+      <div class="rows">
+        ORDER CUT-OFF: <b>NOV 14, 11:59 PM</b><br>
+        FULL PAYMENT: <b>GCASH</b> · SHIPS FROM <b>NOV 21</b><br>
+        IG / TIKTOK: <b>@csmrzrzr</b>
+      </div>
+      <div class="url">cathlauron.github.io/casimir-pasabuy</div>
+    </div>
+    <div class="r"><img src="qr.png"><div>SCAN TO ORDER</div></div>
+  </div>
+</div>
+<script>
+const P=document.getElementById('p');
+const H=[ // [cx,cy,price,suffix]
+ [312,340,'₱550'],[636,339,'₱839','/SET'],[764,492,'₱2,129'],[675,600,'₱1,613'],[108,736,'₱753'],
+ [805,744,'₱1,398','/SET'],[947,858,'₱431'],[108,1010,'₱968'],[391,1148,'₱2,775'],[540,1242,'₱538']];
+const heart=`<svg viewBox="0 0 118 100"><path d="M59 96 C 20 70, 3 50, 5 29 C 7 11, 22 2, 37 4 C 48 6, 55 13, 59 21 C 63 13, 70 6, 81 4 C 96 2, 111 11, 113 29 C 115 50, 98 70, 59 96 Z" fill="#fb8fbe" stroke="#fff" stroke-width="3"/><path d="M22 22 C 26 14, 34 11, 41 12" fill="none" stroke="rgba(255,255,255,.7)" stroke-width="4" stroke-linecap="round"/></svg>`;
+for(const [x,y,p,s] of H){
+  const d=document.createElement('div');d.className='heart';d.style.left=x+'px';d.style.top=(y+4)+'px';
+  d.innerHTML=heart+`<div class="t ${p.length>5?'sm':''}">${p}${s?`<small>${s}</small>`:''}</div>`;P.appendChild(d);
+}
+// whole-set (2,700) heart + label -> not offered
+const c=document.createElement('div');c.className='cover';Object.assign(c.style,{left:'238px',top:'975px',width:'232px',height:'64px',background:'linear-gradient(90deg,rgba(252,226,234,.97),rgba(252,226,234,.97))'});P.appendChild(c);
+const pl=document.createElement('div');pl.className='pill';pl.textContent='SINGLE BOXES ONLY';Object.assign(pl.style,{left:'262px',top:'992px'});P.appendChild(pl);
+</script>
+</body></html>
