@@ -482,6 +482,19 @@ document.getElementById('close').addEventListener('click',()=>document.getElemen
 document.getElementById('modal').addEventListener('click',e=>{if(e.target.id==='modal')e.target.classList.remove('on')});
 renderAll();
 
+/* In-app browsers (TikTok, Instagram) can show an old saved copy of this page.
+   On open, fetch the live page; if its prices/slots script differs, reload once. */
+(function(){
+  if(/[?&]fresh=/.test(location.search) || !window.fetch || !document.currentScript) return;
+  const norm = s => s.replace(/\r/g,'').trim();
+  const mine = norm(document.currentScript.textContent);
+  fetch(location.pathname+'?check='+Date.now(),{cache:'no-store'}).then(r=>r.ok?r.text():'').then(t=>{
+    const open='<'+'script>', close='<\/script>'; // split so the HTML parser doesn't end this script early
+    const a=t.lastIndexOf(open), b=t.lastIndexOf(close);
+    if(a<0||b<a) return;
+    if(norm(t.slice(a+8,b))!==mine && !Object.keys(bag).length) location.replace(location.pathname+'?fresh='+Date.now()+location.hash);
+  }).catch(()=>{});
+})();
 </script>
 </body>
 </html>

@@ -34,6 +34,7 @@ Static page, no backend. Edit the data block near `const FANCON = [` / `const SH
 - Cath removed on purpose (don't re-add): baht prices, "rate locked" chip, "how prices are computed" and "are slots guaranteed" FAQs, "max N" labels, the old "Check out" button, the admin slot panel.
 - Photos: fancon items are crops of the official poster or photos Cath supplied (`talkie`, `card`, `bag`, `tee`, `randoll`); `s_*.jpg` are GMMTV Shop product photos (600px). `avatar.png` = Cath's sticker (head + shoulders, circle). `gcash-qr.png` = payment QR.
 - Mobile-first; test at 390px width.
+- Stale-copy refresh (added Nov 10): TikTok/IG in-app browsers kept showing an old price after an update. At the end of the main script, the page fetches itself (`?check=`, `no-store`); if the live main `<script>` differs and the bag is empty, it reloads once to `?fresh=<time>`. Keep it the **last** inline `<script>` on the page, and never write a literal `</script>` inside it (split it as `'<\/script>'`) or the page breaks.
 
 ## Order tracker — `tracker/index.html`
 Same UI as the earlier Claude-hosted tracker, now on **Firebase** (project `casimir-pasabuy`, Firestore collection `orders`, doc id = order ID).
