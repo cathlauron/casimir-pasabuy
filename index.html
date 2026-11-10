@@ -231,7 +231,7 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:24px 0}
       <div class="formsec final">
         <h3>Last step: review &amp; send your order</h3>
         <div class="summary" id="sum" style="margin-top:8px"><p style="color:var(--muted);font-size:14px">Your bag is empty. Add items to get started.</p></div>
-        <label class="check"><input type="checkbox" id="c1" required><span>I understand that random items (cards, blind boxes) can't be chosen, and that orders can't be cancelled once the item is bought.</span></label>
+        <label class="check"><input type="checkbox" id="c1" required><span>I understand that random items (cards, blind boxes, gasha keychains) can't be chosen, and that orders can't be cancelled once the item is bought.</span></label>
         <label class="check"><input type="checkbox" id="c2" required><span>I'll pay the full amount via GCash by Nov 14, 2026, and pay local shipping separately when my order ships.</span></label>
       </div>
       <div class="err" id="err"></div>
@@ -242,7 +242,7 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:24px 0}
 
 <section class="faq">
   <div class="sec-head"><div><h2>Good to know</h2></div></div>
-  <details><summary>What about random items?</summary><p>Collectible random cards (10 of 35 per pack) and MuvMuv random doll keychain boxes are sealed blind items. You get whatever is inside, and they can't be exchanged.</p></details>
+  <details><summary>What about random items?</summary><p>Collectible random cards (10 of 35 per pack) and MuvMuv random doll keychain boxes are sealed blind items, and each GMMTV Gasha flip acrylic keychain is one random capsule from the gasha machine (7 designs, 1 secret). You get whatever is inside, and they can't be exchanged.</p></details>
   <details><summary>Can I cancel?</summary><p>You can cancel and get a full refund up until the cut-off (Nov 14, 11:59 PM). After we buy your items, orders are final.</p></details>
   <details><summary>How do I reach you?</summary><p>DM <b>@csmrzrzr</b> on <a href="https://www.instagram.com/csmrzrzr/" target="_blank" rel="noopener">Instagram</a> or <a href="https://www.tiktok.com/@csmrzrzr" target="_blank" rel="noopener">TikTok</a>.</p></details>
 </section>
@@ -288,13 +288,14 @@ const RATE = 1.92;     // pesos per baht (locked)
 const MARKUP = 0.12;   // service fee
 /* "taken" = slots already confirmed/paid. Update as orders come in. */
 const FANCON = [
+  {id:'gasha', name:'GMMTV Gasha Flip Acrylic Keychain', thb:200, max:10, taken:0, meta:'≈ 4.7 cm · 1 random gasha capsule · 7 designs (1 secret)', tag:'Random'},
   {id:'card',  name:'Collectible Random Card', thb:200, fixed:550, closed:true, max:10, taken:0, meta:'5.5 × 8.5 cm · random 10 of 35 cards per pack', tag:'Random'},
   {id:'tps',   name:'Transparent Photo Set', thb:390, max:10, taken:0, meta:'4 transparent photocards, 2 photo strips, 1 photo keychain'},
-  {id:'talkie',name:'Talkie MuvMuv Doll Keychain', thb:990, max:5, taken:0, meta:'17 cm · 14 voice messages · replaceable battery'},
+  {id:'talkie',name:'Talkie MuvMuv Doll Keychain', thb:990, closed:true, max:5, taken:0, meta:'17 cm · 14 voice messages · replaceable battery'},
   {id:'holder',name:'MuvMuv Card Holder with Photocard', thb:350, max:5, taken:0, meta:'12 × 14.7 cm · photocard 5.5 × 8.5 cm'},
   {id:'tee',   name:'Official T-Shirt', thb:750, max:5, taken:0, meta:'Printed patch & postcard · chest S 36" · M 38" · L 42" · XL 46" · XXL 48"', sizes:['S','M','L','XL','XXL']},
   {id:'acrylic',name:'Acrylic Photo Display Set', thb:650, max:5, taken:0, meta:'19 × 14.8 cm · photocard 5.5 × 8.5 cm'},
-  {id:'randoll',name:'MuvMuv Random Doll Keychain (single box)', thb:450, max:6, taken:0, meta:'1 sealed blind box · 7 designs (1 secret) · 2.1–2.5 in', tag:'Random'},
+  {id:'randoll',name:'MuvMuv Random Doll Keychain (single box)', thb:450, closed:true, max:6, taken:0, meta:'1 sealed blind box · 7 designs (1 secret) · 2.1–2.5 in', tag:'Random'},
   {id:'headband',name:'MuvMuv Headband', thb:200, max:5, taken:0, meta:'≈ 24 × 5.5 cm'},
   {id:'bag',   name:'MuvMuv Journey Bag', thb:1290, max:5, taken:0, meta:'31 × 24 × 12 cm · with postcard'},
   {id:'strap', name:'MuvMuv Rubber Phone Strap', thb:250, max:5, taken:0, meta:'2.3 × 20.8 cm'}
@@ -355,7 +356,7 @@ function itemCard(i){
 }
 
 function renderGrid(){
-  const list = tab==='fancon'?FANCON:SHOP;
+  const list = (tab==='fancon'?FANCON:SHOP).slice().sort((x,y)=>(x.closed?1:0)-(y.closed?1:0)); // cut-off items go last
   document.getElementById('grid').innerHTML = list.map(itemCard).join('');
   document.getElementById('shopnote').classList.toggle('hidden',tab!=='shop');
   document.getElementById('tabnote').textContent = tab==='fancon'
