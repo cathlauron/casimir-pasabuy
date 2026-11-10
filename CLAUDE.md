@@ -11,7 +11,7 @@ and MuvMuv / MilkLove items from the **GMMTV Shop**, then ship to buyers in the 
 
 ## Business rules (confirmed by Cath)
 - Prices: baht × **₱1.92** (locked rate) × **1.12** (12% markup), rounded **up** to the whole peso. Only peso prices are shown — no baht, no rate, no "how prices are computed".
-- Exception: **Collectible Random Card = flat ₱550** (`fixed:550`), not the formula.
+- Exceptions (flat prices, not the formula): **Collectible Random Card = ₱550** (`fixed:550`), **GMMTV Gasha Flip Acrylic Keychain = ₱475** (`fixed:475`, set Nov 10).
 - **Full payment via GCash** (InstaPay QR on the page, account `AN*****A P.`). Buyers pay only **after** Cath confirms slots by DM.
 - Order cut-off **Nov 14, 11:59 PM**. Refunds by **Nov 16**. Shipping in PH from **Nov 21**; buyer pays local shipping separately; **no meetups**.
 - If sold out: buyer chooses **full refund** or **swap** for a GMMTV Shop item (pays the difference; if cheaper, the difference is refunded; if the backup is also gone, full refund). GMMTV Shop items are refund-only.
