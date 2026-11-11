@@ -73,6 +73,7 @@ tr.open td{background:#fff5f8}
   <div class="tabs" role="tablist">
     <button class="on" data-tab="orders">Orders</button>
     <button data-tab="buy">Buying list</button>
+    <button data-tab="profit">Profit</button>
   </div>
 </header>
 
@@ -119,6 +120,20 @@ tr.open td{background:#fff5f8}
     <div class="tbl"><table class="blist"><thead><tr><th>Item</th><th class="right">Paid</th><th class="right">Not paid yet</th><th class="right">Total</th></tr></thead><tbody id="buyrows"></tbody></table></div>
   </div>
 </div>
+
+<div id="tab-profit" class="hidden">
+  <div class="card">
+    <h2 style="font-size:19px;margin-bottom:4px">Profit from bought items</h2>
+    <p style="margin:0 0 10px;font-size:13.5px;color:var(--muted)">Counts only items you've <b>actually bought</b>: orders marked <b>Bought</b>, and the items you ticked as bought on <b>Partially bought</b> orders. Not bought yet, sold out and cancelled orders count as ₱0. Profit = what the buyer pays − baht price × your exchange rate. Shipping isn't included.</p>
+    <div class="row" style="align-items:center;gap:10px;margin-bottom:12px">
+      <label for="rate" style="margin:0;font-weight:700;font-size:14px">Your exchange rate (₱ per ฿1)</label>
+      <input id="rate" type="number" min="0" step="0.01" style="width:110px">
+      <span class="saving">Saved on this device only</span>
+    </div>
+    <div class="tbl"><table class="blist"><thead><tr><th>Item</th><th class="right">Bought</th><th class="right">Sales</th><th class="right">Cost</th><th class="right">Profit</th></tr></thead><tbody id="profitrows"></tbody></table></div>
+    <p id="profitnote" style="margin:10px 0 0;font-size:13.5px;color:var(--muted)"></p>
+  </div>
+</div>
 </div>
 </div>
 
@@ -138,6 +153,49 @@ const peso=n=>'₱'+(Number(n)||0).toLocaleString('en-PH');
 const num=s=>Number(String(s||'').replace(/[^\d.]/g,''))||0;
 
 let db=null, store=null, orders=[], openId=null, tab='orders';
+
+/* ---------- profit ---------- */
+/* Baht price of every item on the order page (copy of index.html's FANCON/SHOP thb values).
+   When you add an item to the order page, add its exact name and baht price here too. */
+const THB={"GMMTV Gasha Flip Acrylic Keychain":200,"Collectible Random Card":200,"Transparent Photo Set":390,"Talkie MuvMuv Doll Keychain":990,"MuvMuv Card Holder with Photocard":350,"Official T-Shirt":750,"Acrylic Photo Display Set":650,"MuvMuv Random Doll Keychain (single box)":450,"MuvMuv Headband":200,"MuvMuv Journey Bag":1290,"MuvMuv Rubber Phone Strap":250,"MuvMuv Charm Necklace":590,"MuvMuv Sitting Buddy":1190,"MuvMuv Hoodie Blanket":1490,"MuvMuv Plushie Hair Tie":450,"MuvMuv Rubber Charm Set":290,"MuvMuv Sweetie Keychain":290,"MuvMuv Tumbler":490,"MuvMuv Lenticular Hand Fan":150,"MuvMuv Pop Star Card Holder":290,"MuvMuv Portable Comb":250,"MuvMuv Photocard Sleeve Set":150,"MuvMuv Fluffy Ear Pop Hat":890,"MuvMuv Doll Backpack":1090,"MuvMuv Hairband":590,"MuvMuv Elephant Buddy Pants":590,"MuvMuv Leather Multi Card Holder with Strap":590,"MuvMuv Self-Inking Stamp":250,"MuvMuv Magnetic Utility Clip Keychain":300,"MuvMuv Mirror Keychain":290,"Baby MuvMuv Rubber Bag Tag":390,"MuvMuv Plush Pencil Case":590,"MilkLove ID Holder Pin Keychain":250,"MilkLove Phone Buckle":290,"MuvMuv Button Cover Set":250,"MuvMuv Sweet Dream Pajamas":1190,"MuvMuv Character Pocket Zip Folder":350,"MuvMuv Phone Charm":450,"MuvMuv Mini Card Holder with MilkLove Photocard":290,"MuvMuv Glow Acrylic Keychain":250,"MuvMuv Character Rubber Tag":250,"MuvMuv Hair Band":490,"MuvMuv Flora Basket Rubber Hair Clip":350,"MuvMuv Fluffy Card Holder with MilkLove Photocard (Fanday 2024)":590};
+let RATE=1.92; try{const r=parseFloat(localStorage.getItem('csb-rate')); if(r>0) RATE=r}catch(_){}
+// how many of each item in this order you actually bought
+function boughtOf(o,idx){
+  if(o.payStatus==='Cancelled') return 0;
+  const it=(o.items||[])[idx]; if(!it) return 0;
+  if(o.buyStatus==='Bought') return it.qty;
+  if(o.buyStatus==='Partially bought'){const n=Number((o.boughtQty||[])[idx]); return Math.max(0,Math.min(it.qty,n||0));}
+  return 0;
+}
+function profitData(){
+  const t={}; let sales=0,cost=0,adj=0,unknown=new Set(),pending=0;
+  for(const o of orders){
+    if(o.payStatus==='Cancelled') continue;
+    let counted=false;
+    (o.items||[]).forEach((it,idx)=>{
+      const n=boughtOf(o,idx), left=it.qty-n;
+      const thb=THB[it.name];
+      if(left>0&&o.buyStatus!=='Sold out'&&thb!=null) pending+=left*(it.unit-thb*RATE);
+      if(!n) return; counted=true;
+      const k=it.name; t[k]=t[k]||{n:0,sales:0,cost:0,known:thb!=null};
+      t[k].n+=n; t[k].sales+=n*it.unit; sales+=n*it.unit;
+      if(thb!=null){t[k].cost+=n*thb*RATE; cost+=n*thb*RATE} else unknown.add(k);
+    });
+    if(counted||o.buyStatus==='Bought'||o.buyStatus==='Partially bought') adj+=Number(o.profitAdj)||0;
+  }
+  return {t,sales,cost,adj,profit:sales-cost+adj,unknown:[...unknown],pending};
+}
+function renderProfit(){
+  const d=profitData(); const r=x=>peso(Math.round(x));
+  document.getElementById('rate').value=RATE;
+  const keys=Object.keys(d.t).sort();
+  document.getElementById('profitrows').innerHTML=keys.length?keys.map(k=>{const x=d.t[k];return `<tr><td>${esc(k)}</td><td class="right">${x.n}</td><td class="right">${r(x.sales)}</td><td class="right">${x.known?r(x.cost):'?'}</td><td class="right"><b>${x.known?r(x.sales-x.cost):'?'}</b></td></tr>`}).join('')+
+    (d.adj?`<tr><td>Adjustments (swaps etc.)</td><td></td><td></td><td></td><td class="right"><b>${r(d.adj)}</b></td></tr>`:'')+
+    `<tr><td><b>Total</b></td><td></td><td class="right"><b>${r(d.sales)}</b></td><td class="right"><b>${r(d.cost)}</b></td><td class="right"><b>${r(d.profit)}</b></td></tr>`
+    :'<tr><td colspan="5" class="empty">Nothing bought yet. Mark an order\'s purchase as Bought to count its profit.</td></tr>';
+  document.getElementById('profitnote').innerHTML=(d.unknown.length?`<span style="color:#c0392b">No baht price for: ${d.unknown.map(esc).join(', ')}. Their cost isn't subtracted.</span><br>`:'')+
+    `Not counted yet: about ${r(d.pending)} more profit from items in orders that aren't bought yet.`;
+}
 
 /* ---------- parse the order message from the order page ---------- */
 function cleanPaste(text){
@@ -187,7 +245,7 @@ function parseOrder(text){
 }
 function blank(o){return Object.assign({oid:'',created:new Date().toISOString(),buyer:'',handle:'',mobile:'',email:'',address:'',courier:'',items:[],itemTotal:0,prefs:[],request:'',gname:'',
   payStatus:'Awaiting confirmation',amountPaid:0,gcashRef:'',buyStatus:'Not bought yet',refundDue:0,refundStatus:'None',refundRef:'',swapNotes:'',
-  shipFee:0,shipFeePaid:false,shipStatus:'Not shipped',tracking:'',notes:'',raw:''},o)}
+  shipFee:0,shipFeePaid:false,shipStatus:'Not shipped',tracking:'',notes:'',raw:'',boughtQty:[],profitAdj:0},o)}
 
 /* ---------- rendering ---------- */
 function renderStats(){
@@ -204,7 +262,8 @@ function renderStats(){
     ['Not paid yet',unpaid,'orders waiting on payment'],
     ['Refunds pending',peso(refAmt),`${refP.length} order${refP.length===1?'':'s'} · due by Nov 16`],
     ['To ship',toShip,'paid orders not shipped'],
-    ['Shipping fees unpaid',peso(shipOwed),'billed, not yet paid']
+    ['Shipping fees unpaid',peso(shipOwed),'billed, not yet paid'],
+    ['Profit so far',peso(Math.round(profitData().profit)),`bought items only · ₱${RATE}/฿`]
   ].map(([l,v,s])=>`<div class="stat"><div class="l">${l}</div><div class="v">${v}</div><div class="s">${s}</div></div>`).join('');
 }
 function itemsShort(o){return (o.items||[]).map(i=>`${i.qty}× ${i.name}${i.size?' ('+i.size+')':''}`).join(', ')||'—'}
@@ -237,7 +296,9 @@ function detailHTML(o){
       <label>GCash reference no.</label>${inp('gcashRef',o.gcashRef)}
       <h3 style="margin-top:14px">Purchase</h3>
       <label>Status at booth / shop</label>${sel('buyStatus',BUY,o.buyStatus)}
-      <label>Swap notes</label>${inp('swapNotes',o.swapNotes,'text','e.g. tee → hoodie blanket, +₱1,592')}</div>
+      ${o.buyStatus==='Partially bought'?`<label>How many did you buy?</label>${(o.items||[]).map((i,idx)=>`<div class="row" style="align-items:center;gap:6px;margin:3px 0;font-size:13px"><input data-f="boughtQty" data-i="${idx}" type="number" min="0" max="${i.qty}" step="1" value="${boughtOf(o,idx)}" style="width:58px"> of ${i.qty} × ${esc(i.name)}${i.size?' ('+esc(i.size)+')':''}</div>`).join('')}`:''}
+      <label>Swap notes</label>${inp('swapNotes',o.swapNotes,'text','e.g. tee → hoodie blanket, +₱1,592')}
+      <label>Profit adjustment (₱)</label>${inp('profitAdj',o.profitAdj,'number','e.g. profit on a swap item')}</div>
     <div><h3>Refund</h3>
       <label>Status</label>${sel('refundStatus',REF,o.refundStatus)}
       <label>Refund due (₱)</label>${inp('refundDue',o.refundDue,'number')}
@@ -273,7 +334,7 @@ function renderBuy(){
   const keys=Object.keys(t).sort();
   document.getElementById('buyrows').innerHTML=keys.length?keys.map(k=>`<tr><td>${esc(k)}</td><td class="right"><b>${t[k].paid}</b></td><td class="right">${t[k].unpaid}</td><td class="right">${t[k].paid+t[k].unpaid}</td></tr>`).join(''):'<tr><td colspan="4" class="empty">No items yet.</td></tr>';
 }
-function renderAll(){renderStats();renderRows();renderBuy()}
+function renderAll(){renderStats();renderRows();renderBuy();renderProfit()}
 
 /* ---------- writes ---------- */
 const saving=s=>document.getElementById('saving').textContent=s;
@@ -282,7 +343,7 @@ async function save(oid,patch){
   try{await store.update(oid,patch); saving('Saved ✓')}
   catch(e){ if(e&&e.code==='unavailable'){await new Promise(r=>setTimeout(r,700+Math.random()*600)); try{await store.update(oid,patch);saving('Saved ✓');return}catch(_){}} saving('Could not save: '+(e&&e.message||e)) }
 }
-const NUMF=['itemTotal','amountPaid','refundDue','shipFee'];
+const NUMF=['itemTotal','amountPaid','refundDue','shipFee','profitAdj'];
 document.getElementById('rows').addEventListener('click',e=>{
   const del=e.target.closest('[data-del]');
   if(del){ if(del.dataset.armed){ db&&store.del(del.dataset.del).catch(err=>saving('Could not delete: '+err.message)); openId=null; }
@@ -293,12 +354,14 @@ document.getElementById('rows').addEventListener('click',e=>{
 document.getElementById('rows').addEventListener('change',e=>{
   const el=e.target; const f=el.dataset.f; if(!f) return; const box=el.closest('.detail'); if(!box) return; const oid=box.dataset.id;
   let v=el.type==='checkbox'?el.checked:el.value; if(NUMF.includes(f)) v=num(v);
-  const o=orders.find(x=>x.oid===oid); if(!o||o[f]===v) return;
+  const o=orders.find(x=>x.oid===oid); if(!o) return;
+  if(f==='boughtQty'){ const q=(o.items||[]).map((_,i)=>boughtOf(o,i)); q[+el.dataset.i]=Math.max(0,Math.min(num(v),(o.items[+el.dataset.i]||{}).qty||0)); el.value=q[+el.dataset.i]; o.boughtQty=q; renderStats(); renderProfit(); save(oid,{boughtQty:q}); return; }
+  if(o[f]===v) return;
   const patch={[f]:v};
   // helpful automation
   if(f==='payStatus'&&v==='Paid'&&!(Number(o.amountPaid)>0)) patch.amountPaid=o.itemTotal||0;
   if(f==='buyStatus'&&v==='Sold out'){ if(o.refundStatus==='None') patch.refundStatus='Pending'; if(!(Number(o.refundDue)>0)) patch.refundDue=Number(o.amountPaid)||0; }
-  Object.assign(o,patch); renderStats(); save(oid,patch);
+  Object.assign(o,patch); renderStats(); renderProfit(); if(f==='buyStatus') renderRows(); save(oid,patch);
 });
 
 let pendingReplace=[];
@@ -327,7 +390,7 @@ document.getElementById('addmsg').addEventListener('click',async e=>{
   for(const o of pendingReplace){
     try{ const old=orders.find(x=>x.oid===o.oid)||{};
       // keep your tracking fields (payment, refunds, shipping), replace the buyer's details and items
-      const keep={}; for(const f of ['created','payStatus','amountPaid','buyStatus','refundDue','refundStatus','refundRef','swapNotes','shipFee','shipFeePaid','shipStatus','tracking','notes']) if(old[f]!==undefined) keep[f]=old[f];
+      const keep={}; for(const f of ['created','payStatus','amountPaid','buyStatus','refundDue','refundStatus','refundRef','swapNotes','profitAdj','shipFee','shipFeePaid','shipStatus','tracking','notes']) if(old[f]!==undefined) keep[f]=old[f];
       await store.set(o.oid,Object.assign(blank(o),keep)); done.push(o.oid);
     }catch(err){}
   }
@@ -346,22 +409,24 @@ document.getElementById('addblank').addEventListener('click',()=>{
 for(const id of ['q','fpay','fship','frefund']) document.getElementById(id).addEventListener('input',renderRows);
 document.querySelectorAll('.tabs button').forEach(b=>b.addEventListener('click',()=>{
   tab=b.dataset.tab;document.querySelectorAll('.tabs button').forEach(x=>x.classList.toggle('on',x===b));
-  document.getElementById('tab-orders').classList.toggle('hidden',tab!=='orders');document.getElementById('tab-buy').classList.toggle('hidden',tab!=='buy');
+  for(const t of ['orders','buy','profit']) document.getElementById('tab-'+t).classList.toggle('hidden',tab!==t);
 }));
 document.getElementById('csv').addEventListener('click',async()=>{
-  const cols=['oid','created','buyer','handle','mobile','email','address','courier','items','itemTotal','prefs','payStatus','amountPaid','gname','gcashRef','buyStatus','swapNotes','refundStatus','refundDue','refundRef','shipStatus','shipFee','shipFeePaid','tracking','notes'];
+  const cols=['oid','created','buyer','handle','mobile','email','address','courier','items','itemTotal','prefs','payStatus','amountPaid','gname','gcashRef','buyStatus','swapNotes','profitAdj','refundStatus','refundDue','refundRef','shipStatus','shipFee','shipFeePaid','tracking','notes'];
   const cell=v=>'"'+String(v??'').replace(/"/g,'""')+'"';
   const csv=[cols.join(',')].concat(orders.map(o=>cols.map(c=>cell(c==='items'?itemsShort(o):c==='prefs'?(o.prefs||[]).join(' | '):o[c])).join(','))).join('\n');
   const out=document.getElementById('csvout'); out.value=csv; out.classList.remove('hidden');
   try{await navigator.clipboard.writeText(csv);saving('CSV copied ✓ — paste into Google Sheets or Excel')}catch(_){out.select();saving('Select the text below and copy it')}
 });
 
+document.getElementById('rate').addEventListener('change',e=>{const r=parseFloat(e.target.value); if(!(r>0)) return; RATE=r; try{localStorage.setItem('csb-rate',String(r))}catch(_){} renderStats(); renderProfit();});
+
 /* ---------- connect ---------- */
 renderAll();
 window.startTracker=(adapter)=>{ store=adapter; db=true;
   store.subscribe(list=>{
     orders=list.map(d=>Object.assign(blank({}),d)).sort((a,b)=>(b.created||'').localeCompare(a.created||''));
-    const a=document.activeElement; if(a&&a.closest&&a.closest('.detail')&&a.tagName==='INPUT'&&a.type!=='checkbox'){renderStats();renderBuy();return}
+    const a=document.activeElement; if(a&&a.closest&&a.closest('.detail')&&a.tagName==='INPUT'&&a.type!=='checkbox'){renderStats();renderBuy();renderProfit();return}
     renderAll();
   },err=>saving('Live updates stopped: '+(err&&err.message||err)));
 };
