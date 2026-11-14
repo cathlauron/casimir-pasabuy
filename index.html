@@ -290,15 +290,15 @@ const MARKUP = 0.12;   // service fee
 const FANCON = [
   {id:'gasha', name:'GMMTV Gasha Flip Acrylic Keychain', thb:200, fixed:475, closed:true, max:10, taken:0, meta:'≈ 4.7 cm · 1 random gasha capsule · 7 designs (1 secret)', tag:'Random'},
   {id:'card',  name:'Collectible Random Card', thb:200, fixed:550, closed:true, max:10, taken:0, meta:'5.5 × 8.5 cm · random 10 of 35 cards per pack', tag:'Random'},
-  {id:'tps',   name:'Transparent Photo Set', thb:390, max:10, taken:0, meta:'4 transparent photocards, 2 photo strips, 1 photo keychain'},
+  {id:'tps',   name:'Transparent Photo Set', thb:390, closed:true, max:10, taken:0, meta:'4 transparent photocards, 2 photo strips, 1 photo keychain'},
   {id:'talkie',name:'Talkie MuvMuv Doll Keychain', thb:990, closed:true, max:5, taken:0, meta:'17 cm · 14 voice messages · replaceable battery'},
-  {id:'holder',name:'MuvMuv Card Holder with Photocard', thb:350, max:5, taken:0, meta:'12 × 14.7 cm · photocard 5.5 × 8.5 cm'},
-  {id:'tee',   name:'Official T-Shirt', thb:750, max:5, taken:0, meta:'Printed patch & postcard · chest S 36" · M 38" · L 42" · XL 46" · XXL 48"', sizes:['S','M','L','XL','XXL']},
-  {id:'acrylic',name:'Acrylic Photo Display Set', thb:650, max:5, taken:0, meta:'19 × 14.8 cm · photocard 5.5 × 8.5 cm'},
+  {id:'holder',name:'MuvMuv Card Holder with Photocard', thb:350, closed:true, max:5, taken:0, meta:'12 × 14.7 cm · photocard 5.5 × 8.5 cm'},
+  {id:'tee',   name:'Official T-Shirt', thb:750, closed:true, max:5, taken:0, meta:'Printed patch & postcard · chest S 36" · M 38" · L 42" · XL 46" · XXL 48"', sizes:['S','M','L','XL','XXL']},
+  {id:'acrylic',name:'Acrylic Photo Display Set', thb:650, closed:true, max:5, taken:0, meta:'19 × 14.8 cm · photocard 5.5 × 8.5 cm'},
   {id:'randoll',name:'MuvMuv Random Doll Keychain (single box)', thb:450, closed:true, max:6, taken:0, meta:'1 sealed blind box · 7 designs (1 secret) · 2.1–2.5 in', tag:'Random'},
-  {id:'headband',name:'MuvMuv Headband', thb:200, max:5, taken:0, meta:'≈ 24 × 5.5 cm'},
-  {id:'bag',   name:'MuvMuv Journey Bag', thb:1290, max:5, taken:0, meta:'31 × 24 × 12 cm · with postcard'},
-  {id:'strap', name:'MuvMuv Rubber Phone Strap', thb:250, max:5, taken:0, meta:'2.3 × 20.8 cm'}
+  {id:'headband',name:'MuvMuv Headband', thb:200, closed:true, max:5, taken:0, meta:'≈ 24 × 5.5 cm'},
+  {id:'bag',   name:'MuvMuv Journey Bag', thb:1290, closed:true, max:5, taken:0, meta:'31 × 24 × 12 cm · with postcard'},
+  {id:'strap', name:'MuvMuv Rubber Phone Strap', thb:250, closed:true, max:5, taken:0, meta:'2.3 × 20.8 cm'}
 ];
 const SHOP = [
   ['necklace','MuvMuv Charm Necklace',590],['sitting','MuvMuv Sitting Buddy',1190],['blanket','MuvMuv Hoodie Blanket',1490],
@@ -313,7 +313,7 @@ const SHOP = [
   ['phonecharm','MuvMuv Phone Charm',450],['minicard','MuvMuv Mini Card Holder with MilkLove Photocard',290],['glow','MuvMuv Glow Acrylic Keychain',250],
   ['rubbertag','MuvMuv Character Rubber Tag',250],['hairband2','MuvMuv Hair Band',490],['floraclip','MuvMuv Flora Basket Rubber Hair Clip',350],
   ['fluffycard','MuvMuv Fluffy Card Holder with MilkLove Photocard (Fanday 2024)',590]
-].map(([id,name,thb])=>({id:'s_'+id,img:id,name,thb,max:5,taken:0}));
+].map(([id,name,thb])=>({id:'s_'+id,img:id,name,thb,closed:true,max:5,taken:0}));
 /* ===== end settings ===== */
 
 /* SLOTS: available slots per item, saved from the admin panel */

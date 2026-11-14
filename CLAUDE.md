@@ -22,7 +22,7 @@ and MuvMuv / MilkLove items from the **GMMTV Shop**, then ship to buyers in the 
 Fancon: random card 10 · transparent photo set 10 · Talkie doll 5 · card holder 5 · T-shirt 5 (shared across S–XXL) · acrylic display 5 · random doll keychain **single box only, 6** (whole 8-box set NOT offered) · headband 5 · journey bag 5 · phone strap 5 · GMMTV Gasha flip acrylic keychain 10 (one random capsule, ฿200, added Nov 10; `img/gasha.jpg` is a crop of the gasha poster with the baht heart painted out).
 GMMTV Shop items: 5 each (33 items that were in stock on shop.gmm-tv.com/collections/muvmuv on Oct 30, 2026).
 
-**Current status:** Collectible Random Card is **cut off** (`closed:true`) as of Nov 5. Talkie MuvMuv Doll Keychain and MuvMuv Random Doll Keychain cut off Nov 10. The gasha keychain is listed first; `renderGrid()` always sorts cut-off items to the bottom of the grid.
+**Current status (Nov 14):** **all items are cut off** (`closed:true` on every FANCON item and on every SHOP item via the `.map`). To reopen one, remove its `closed:true` (shop items: take `closed:true` out of the `SHOP` `.map` and add it per item instead).
 
 ## Order website — `index.html` (single file + `img/`)
 Static page, no backend. Edit the data block near `const FANCON = [` / `const SHOP = [`:
