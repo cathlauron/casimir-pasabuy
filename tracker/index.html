@@ -99,7 +99,7 @@ tr.open td{background:#fff5f8}
   </div>
 
   <div class="toolbar">
-    <input id="q" type="search" placeholder="Search ID, name, handle…">
+    <input id="q" type="search" placeholder="Search ID, name, handle, item…">
     <select id="fpay"><option value="">All payments</option></select>
     <select id="fship"><option value="">All shipping</option></select>
     <select id="frefund"><option value="">All refunds</option></select>
@@ -271,7 +271,7 @@ function filtered(){
   const q=document.getElementById('q').value.trim().toLowerCase();
   const fp=document.getElementById('fpay').value, fs=document.getElementById('fship').value, fr=document.getElementById('frefund').value;
   return orders.filter(o=>(!fp||o.payStatus===fp)&&(!fs||o.shipStatus===fs)&&(!fr||o.refundStatus===fr)&&
-    (!q||[o.oid,o.buyer,o.handle,o.mobile,o.gname].join(' ').toLowerCase().includes(q)));
+    (!q||[o.oid,o.buyer,o.handle,o.mobile,o.gname,itemsShort(o)].join(' ').toLowerCase().includes(q)));
 }
 function sel(f,list,v){return `<select data-f="${f}">${list.map(x=>`<option ${x===v?'selected':''}>${x}</option>`).join('')}</select>`}
 function inp(f,v,type='text',ph=''){return `<input data-f="${f}" type="${type}" value="${esc(v)}" placeholder="${esc(ph)}" ${type==='number'?'min="0" step="1"':''}>`}
