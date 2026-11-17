@@ -33,7 +33,7 @@ header.hero{padding-top:34px;padding-bottom:18px}
 .chip{background:#fff;border:1.5px solid var(--line);border-radius:999px;padding:7px 13px;font-size:13.5px;font-weight:700}
 .chip b{color:var(--pink-ink)}
 .chip.mint{background:var(--mint);border-color:var(--mint-2)}
-.closed-note{margin-top:16px;background:var(--ink);color:#fff;border-radius:16px;padding:14px 16px;font-size:15px;line-height:1.5}
+.closed-note{margin-top:16px;background:var(--pink-ink);color:#fff;border-radius:16px;padding:14px 16px;font-size:15px;line-height:1.5}
 .closed-note b{color:#fff}
 .closed-note span{display:block;margin-top:6px;color:#f1dce4;font-size:14px}
 section{margin:26px 0}
@@ -138,17 +138,16 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:24px 0}
 
 <header class="hero wrap">
   <div class="brand"><img class="dot" src="img/avatar.png" alt="Casimir">Casimir Pasa"buy"</div>
-  <h1>MilkLove Fancon merch <span>&amp; MuvMuv goodies</span>, bought for you in Bangkok</h1>
-  <p class="lead">We're going to the <b>Milk Love Whimsical House Fancon</b> on Nov 15 and the GMMTV Shop while we're in Bangkok. Pick what you want, we buy it in person and bring it home to the Philippines for you.</p>
+  <h1>MilkLove Fancon merch <span>&amp; MuvMuv goodies</span>, delivered to you in PH</h1>
+  <p class="lead">Missed the <b>Milk Love Whimsical House Fancon</b>? We'll order the official merch from the <b>GMMTV Shop</b> for you and deliver it in the Philippines. Pick what you want, prices are already in pesos.</p>
   <div class="chips">
-    <span class="chip">🗓 Order cut-off: <b>Nov 14, 11:59 PM</b></span>
-    <span class="chip">🛍 Booth purchase: <b>Nov 15</b></span>
-    <span class="chip">💸 Refunds by: <b>Nov 16</b></span>
-    <span class="chip">📦 Ships from PH: <b>Nov 21</b></span>
+    <span class="chip">🗓 Order cut-off: <b>Nov 25, 11:59 PM</b></span>
+    <span class="chip">🛍 Ordered from: <b>GMMTV Shop</b></span>
+    <span class="chip">🚚 Pre-order items: <b>ship when GMMTV releases them</b></span>
   </div>
   <div class="closed-note" role="status">
-    <b>Fancon orders are now closed.</b> Thank you to everyone who ordered! <b>Still available:</b> Yoonighty YO★ caps, on hand at ₱1,100 each. Add them below.
-    <span>Already ordered? We'll update you in your DMs on IG or TikTok (<b>@csmrzrzr</b>). Parcels ship from Nov 21.</span>
+    <b>Round 2 is open! 🎉</b> Missed the fancon? Order the official Milk Love Whimsical House merch from the GMMTV Shop through us until <b>Nov 25, 11:59 PM</b>. Yoonighty YO★ caps are also on hand at ₱1,100.
+    <span>Already ordered in round 1? Nothing changes for you: parcels ship from Nov 21, and we'll update you in your DMs (<b>@csmrzrzr</b>).</span>
   </div>
 </header>
 
@@ -158,7 +157,7 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:24px 0}
 <section>
   <div class="steps">
     <div class="step"><div class="n">1</div><h3>Pick your items</h3><p>Add items below. All prices are in pesos.</p></div>
-    <div class="step"><div class="n">2</div><h3>Fill in your details</h3><p>Tell us where to ship and what to do if an item sells out at the booth.</p></div>
+    <div class="step"><div class="n">2</div><h3>Fill in your details</h3><p>Tell us where to ship and what to do if an item sells out.</p></div>
     <div class="step"><div class="n">3</div><h3>DM us your order</h3><p>Copy your order summary and send it to <b>@csmrzrzr</b> on IG or TikTok. We'll confirm your slots.</p></div>
     <div class="step"><div class="n">4</div><h3>Pay in full via GCash</h3><p>Once we confirm, scan our GCash QR and send your screenshot + reference number. Pay in full once we confirm.</p></div>
   </div>
@@ -168,11 +167,11 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:24px 0}
   <div class="sec-head">
     <div>
       <h2>Choose your items</h2>
-      <p id="tabnote">Official Milk Love Whimsical House Fancon merchandise, bought at the booth on Nov 15.</p>
+      <p id="tabnote">Official Milk Love Whimsical House Fancon merchandise from the GMMTV Shop. Orders close Nov 25, 11:59 PM.</p>
     </div>
     <div class="tabs" role="tablist">
       <button class="on" data-tab="fancon" role="tab">Fancon merch</button>
-      <button data-tab="shop" role="tab">GMMTV Shop MuvMuv</button>
+      <button data-tab="shop" role="tab" class="hidden">GMMTV Shop MuvMuv</button>
     </div>
   </div>
   <div id="grid" class="grid"></div>
@@ -180,10 +179,9 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:24px 0}
 </section>
 
 <section id="soldout">
-  <div class="sec-head"><div><h2>If an item sells out</h2><p>Fancon booths sell out fast. We buy in the order payments were received, but we can't promise every item. You'll choose one of these for each item when you check out:</p></div></div>
+  <div class="sec-head"><div><h2>If an item sells out</h2><p>Popular items can sell out fast. We order in the order payments were received, but we can't promise every item.</p></div></div>
   <div class="two">
-    <div class="opt"><h3>💸 Full refund</h3><p>We send back <b>100% of what you paid for that item</b> through GCash by <b>Nov 16, 2026</b>. No fees taken.</p></div>
-    <div class="opt"><h3>🔁 Swap for a GMMTV Shop item</h3><p>Pick a backup from the GMMTV Shop MuvMuv list. If it costs more, <b>you pay the difference</b>. If it costs less, we refund the difference. If the backup is also gone, we refund you in full.</p></div>
+    <div class="opt"><h3>💸 Full refund</h3><p>If GMMTV sells out before we can order your item, we send back <b>100% of what you paid for it</b> through GCash. No fees taken.</p></div>
   </div>
 </section>
 
@@ -292,24 +290,25 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:24px 0}
 <script>
 /* ===== SETTINGS: edit these ===== */
 /* Change PAGE_VERSION whenever you change anything on this page (text too), so old saved copies in TikTok/IG reload. */
-const PAGE_VERSION = '2026-11-17 yoonighty caps 3 slots';
+const PAGE_VERSION = '2026-11-17 round 2 gmmtv shop';
 const RATE = 1.92;     // pesos per baht (locked)
 const MARKUP = 0.12;   // service fee
 /* "taken" = slots already confirmed/paid. Update as orders come in. */
 const FANCON = [
   {id:'yo_brown', name:'Yoonighty YO★ Cap (Beige / Brown)', thb:0, fixed:1100, max:3, taken:0, onhand:true, meta:'On hand, bought in Bangkok · ships from Nov 21', tag:'On hand'},
   {id:'yo_grey', name:'Yoonighty YO★ Cap (White / Grey)', thb:0, fixed:1100, max:3, taken:0, onhand:true, meta:'On hand, bought in Bangkok · ships from Nov 21', tag:'On hand'},
-  {id:'gasha', name:'GMMTV Gasha Flip Acrylic Keychain', thb:200, fixed:475, closed:true, max:10, taken:0, meta:'≈ 4.7 cm · 1 random gasha capsule · 7 designs (1 secret)', tag:'Random'},
-  {id:'card',  name:'Collectible Random Card', thb:200, fixed:550, closed:true, max:10, taken:0, meta:'5.5 × 8.5 cm · random 10 of 35 cards per pack', tag:'Random'},
-  {id:'tps',   name:'Transparent Photo Set', thb:390, closed:true, max:10, taken:0, meta:'4 transparent photocards, 2 photo strips, 1 photo keychain'},
-  {id:'talkie',name:'Talkie MuvMuv Doll Keychain', thb:990, closed:true, max:5, taken:0, meta:'17 cm · 14 voice messages · replaceable battery'},
-  {id:'holder',name:'MuvMuv Card Holder with Photocard', thb:350, closed:true, max:5, taken:0, meta:'12 × 14.7 cm · photocard 5.5 × 8.5 cm'},
-  {id:'tee',   name:'Official T-Shirt', thb:750, closed:true, max:5, taken:0, meta:'Printed patch & postcard · chest S 36" · M 38" · L 42" · XL 46" · XXL 48"', sizes:['S','M','L','XL','XXL']},
-  {id:'acrylic',name:'Acrylic Photo Display Set', thb:650, closed:true, max:5, taken:0, meta:'19 × 14.8 cm · photocard 5.5 × 8.5 cm'},
-  {id:'randoll',name:'MuvMuv Random Doll Keychain (single box)', thb:450, closed:true, max:6, taken:0, meta:'1 sealed blind box · 7 designs (1 secret) · 2.1–2.5 in', tag:'Random'},
-  {id:'headband',name:'MuvMuv Headband', thb:200, closed:true, max:5, taken:0, meta:'≈ 24 × 5.5 cm'},
-  {id:'bag',   name:'MuvMuv Journey Bag', thb:1290, closed:true, max:5, taken:0, meta:'31 × 24 × 12 cm · with postcard'},
-  {id:'strap', name:'MuvMuv Rubber Phone Strap', thb:250, closed:true, max:5, taken:0, meta:'2.3 × 20.8 cm'}
+  {id:'talkie',name:'Talkie MuvMuv Doll Keychain', thb:990, max:5, taken:0, meta:'17 cm · 14 voice messages · Pre-order: GMMTV ships mid February 2027', tag:'Pre-order'},
+  {id:'acrylic',name:'Acrylic Photo Display Set', thb:650, max:5, taken:0, meta:'19 × 14.8 cm · photocard 5.5 × 8.5 cm · Pre-order: GMMTV ships mid December 2026', tag:'Pre-order'},
+  {id:'holder',name:'MuvMuv Card Holder with Photocard', thb:350, max:5, taken:0, meta:'12 × 14.7 cm · photocard 5.5 × 8.5 cm · In stock at GMMTV Shop'},
+  {id:'tee',   name:'Official T-Shirt', thb:750, max:5, taken:0, meta:'Printed patch & postcard · chest S 36" · M 38" · L 42" · XL 46" · XXL 48" · In stock at GMMTV Shop', sizes:['S','M','L','XL','XXL']},
+  {id:'tps',   name:'Transparent Photo Set', thb:370, max:10, taken:0, meta:'4 transparent photocards, 1 photo strip, 1 photo keychain · In stock at GMMTV Shop'},
+  {id:'randoll',name:'MuvMuv Random Doll Keychain (single box)', thb:450, max:6, taken:0, meta:'1 sealed blind box · 7 designs (1 secret) · In stock at GMMTV Shop', tag:'Random'},
+  {id:'randoll_set',name:'MuvMuv Random Doll Keychain (whole set, 6 boxes)', thb:2700, max:3, taken:0, meta:'6 sealed blind boxes · 7 designs (1 secret) · In stock at GMMTV Shop', tag:'Random'},
+  {id:'headband',name:'MuvMuv Headband', thb:200, max:5, taken:0, meta:'≈ 24 × 5.5 cm · In stock at GMMTV Shop'},
+  {id:'bag',   name:'MuvMuv Journey Bag', thb:1290, max:5, taken:0, meta:'31 × 24 × 12 cm · with postcard · In stock at GMMTV Shop'},
+  {id:'strap', name:'MuvMuv Rubber Phone Strap', thb:250, max:5, taken:0, meta:'2.3 × 20.8 cm · In stock at GMMTV Shop'},
+  {id:'card',  name:'Collectible Random Card', thb:200, fixed:550, closed:true, max:10, taken:0, meta:'Sold out at GMMTV Shop', tag:'Random'},
+  {id:'gasha', name:'GMMTV Gasha Flip Acrylic Keychain', thb:200, fixed:475, closed:true, max:10, taken:0, meta:'≈ 4.7 cm · 1 random gasha capsule · 7 designs (1 secret)', tag:'Random'}
 ];
 const SHOP = [
   ['necklace','MuvMuv Charm Necklace',590],['sitting','MuvMuv Sitting Buddy',1190],['blanket','MuvMuv Hoodie Blanket',1490],
@@ -371,7 +370,7 @@ function renderGrid(){
   document.getElementById('grid').innerHTML = list.map(itemCard).join('');
   document.getElementById('shopnote').classList.toggle('hidden',tab!=='shop');
   document.getElementById('tabnote').textContent = tab==='fancon'
-    ? 'Official Milk Love Whimsical House Fancon merchandise, bought at the booth on Nov 15.'
+    ? 'Official Milk Love Whimsical House Fancon merchandise from the GMMTV Shop. Orders close Nov 25, 11:59 PM.'
     : 'In-stock MuvMuv & MilkLove items from the GMMTV Shop. Order them on their own, or pick one as a backup.';
 }
 
@@ -402,12 +401,12 @@ function renderPrefs(){
   if(!ids.length){el.innerHTML='<p style="color:var(--muted);font-size:14px">Add items above and your choices will show here.</p>';return}
   el.innerHTML = ids.map(id=>{
     const i=ALL[id]; const p=prefs[id]||(prefs[id]={mode:'refund',swap:''});
-    const canSwap = i.src==='fancon' && !i.onhand;
+    const canSwap = false; // round 2: refund only
     return `<div class="pref"><div class="nm">${i.name}</div><div class="radios">
       <label><input type="radio" name="p_${id}" value="refund" ${p.mode==='refund'?'checked':''}> Full refund</label>
       ${canSwap?`<label><input type="radio" name="p_${id}" value="swap" ${p.mode==='swap'?'checked':''}> Swap for a GMMTV Shop item</label>`:''}
     </div>${canSwap&&p.mode==='swap'?`<select data-swap="${id}" aria-label="Backup item for ${i.name}">${swapOptions(p.swap)}</select>`:''}
-    ${!canSwap?`<div class="meta" style="font-size:12.5px;color:var(--muted);margin-top:4px">${i.onhand?'On-hand item: refunded in full if it\'s already been sold.':'GMMTV Shop items are refunded in full if sold out.'}</div>`:''}</div>`;
+    ${!canSwap?`<div class="meta" style="font-size:12.5px;color:var(--muted);margin-top:4px">${i.onhand?'On-hand item: refunded in full if it\'s already been sold.':'Refunded in full if GMMTV sells out.'}</div>`:''}</div>`;
   }).join('');
 }
 
