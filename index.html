@@ -266,7 +266,7 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:24px 0}
 
 <div class="bar" id="bar">
   <div class="wrap">
-    <div class="t" id="bartext">0 items · ₱0<small>Local PH shipping billed separately</small></div>
+    <div class="t" id="bartext">0 items · ₱0<small>Shipping billed separately</small></div>
     <button class="btn" type="button" id="bar-go">Review &amp; send my order →</button>
   </div>
 </div>
@@ -299,7 +299,7 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:24px 0}
 <script>
 /* ===== SETTINGS: edit these ===== */
 /* Change PAGE_VERSION whenever you change anything on this page (text too), so old saved copies in TikTok/IG reload. */
-const PAGE_VERSION = '2026-11-17 round 2 shipping included';
+const PAGE_VERSION = '2026-11-17 round 2 hide shipping note';
 const RATE = 1.92;     // pesos per baht (locked)
 const MARKUP = 0.12;   // service fee
 /* "taken" = slots already confirmed/paid. Update as orders come in. */
@@ -378,7 +378,7 @@ function itemCard(i){
   return `<article class="item ${q?'inbag':''}" ${i.closed?'style="opacity:.6"':''}>
     <div class="ph"><img src="${img}" alt="${i.name}" loading="lazy"></div>
     <div class="bd">${tag}<h3>${i.name}</h3>${i.meta?`<div class="meta">${i.meta}</div>`:''}${SIZE_NOTE[i.id]?`<div class="meta">${SIZE_NOTE[i.id]}</div>`:''}${i.ship&&!i.closed?`<div class="ship ${SHIP[i.ship].cls}">${SHIP[i.ship].txt}</div>`:''}
-    <div class="price"><span class="php">${peso(price(i))}</span></div>${i.shipg&&!i.closed?'<div class="meta" style="font-size:12px;color:var(--mint-ink);font-weight:700">✈️ incl. shipping from Thailand</div>':''}
+    <div class="price"><span class="php">${peso(price(i))}</span></div>
     <div class="slots ${slotCls}">${slotTxt}</div>${controls}</div></article>`;
 }
 
@@ -401,7 +401,7 @@ function lines(){
 
 function renderSummary(){
   const ls=lines(); const n=ls.reduce((a,l)=>a+l.qty,0); const tot=ls.reduce((a,l)=>a+l.total,0);
-  document.getElementById('bartext').innerHTML = `${n} item${n===1?'':'s'} · ${peso(tot)}<small>Local PH shipping billed separately</small>`;
+  document.getElementById('bartext').innerHTML = `${n} item${n===1?'':'s'} · ${peso(tot)}<small>Shipping billed separately</small>`;
   const el=document.getElementById('sum');
   if(!ls.length){el.innerHTML='<p style="color:var(--muted);font-size:14px">Your bag is empty. Add items to get started.</p>';return}
   el.innerHTML='<table>'+ls.map(l=>`<tr><td>${l.qty} × ${l.i.name}${l.size?` (${l.size})`:''}<div class="meta" style="font-size:12px;color:var(--muted)">${peso(l.unit)} each</div></td><td class="r">${peso(l.total)}</td></tr>`).join('')+
@@ -469,7 +469,7 @@ MilkLove Fancon / MuvMuv · Bangkok Nov 2026
 
 ITEMS
 ${ls.map(l=>`- ${l.qty} x ${l.i.name}${l.size?' ('+l.size+')':''} @ ${peso(l.unit)} = ${peso(l.total)}`).join('\n')}
-ITEM TOTAL: ${peso(tot)} (incl. shipping from Thailand; local PH shipping billed separately)
+ITEM TOTAL: ${peso(tot)} (shipping billed separately)
 
 IF SOLD OUT
 ${prefTxt}
