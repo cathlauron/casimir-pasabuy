@@ -147,7 +147,7 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:24px 0}
     <span class="chip">📦 Ships from PH: <b>Nov 21</b></span>
   </div>
   <div class="closed-note" role="status">
-    <b>Orders are now closed.</b> All items are cut off and we're no longer taking new orders. Thank you to everyone who ordered!
+    <b>Fancon orders are now closed.</b> Thank you to everyone who ordered! <b>Still available:</b> Yoonighty YO★ caps, on hand at ₱1,100 each. Add them below.
     <span>Already ordered? We'll update you in your DMs on IG or TikTok (<b>@csmrzrzr</b>). Parcels ship from Nov 21.</span>
   </div>
 </header>
@@ -160,7 +160,7 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:24px 0}
     <div class="step"><div class="n">1</div><h3>Pick your items</h3><p>Add items below. All prices are in pesos.</p></div>
     <div class="step"><div class="n">2</div><h3>Fill in your details</h3><p>Tell us where to ship and what to do if an item sells out at the booth.</p></div>
     <div class="step"><div class="n">3</div><h3>DM us your order</h3><p>Copy your order summary and send it to <b>@csmrzrzr</b> on IG or TikTok. We'll confirm your slots.</p></div>
-    <div class="step"><div class="n">4</div><h3>Pay in full via GCash</h3><p>Once we confirm, scan our GCash QR and send your screenshot + reference number. Payment must be in by Nov 14.</p></div>
+    <div class="step"><div class="n">4</div><h3>Pay in full via GCash</h3><p>Once we confirm, scan our GCash QR and send your screenshot + reference number. Pay in full once we confirm.</p></div>
   </div>
 </section>
 
@@ -228,7 +228,7 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:24px 0}
       </div>
       <div class="formsec">
         <h3>Payment confirmation</h3>
-        <p style="font-size:14px;color:var(--muted);margin:6px 0 0"><b>Wait for our DM confirming your slots before paying.</b> Then scan this QR with GCash, pay the <b>full item total</b> by <b>Nov 14</b>, and send us your screenshot.</p>
+        <p style="font-size:14px;color:var(--muted);margin:6px 0 0"><b>Wait for our DM confirming your slots before paying.</b> Then scan this QR with GCash, pay the <b>full item total</b>, and send us your screenshot.</p>
         <div class="qrbox"><img src="img/gcash-qr.png" alt="GCash / InstaPay QR code for AN*****A P."><div><b>GCash · InstaPay QR</b><br>Account: AN*****A P.<br><span style="color:var(--muted)">Enter your item total when you scan. Put your order ID in the message.</span></div></div>
         <div class="row">
           <div><label for="f-gname">GCash account name you'll pay from</label><input id="f-gname" required></div>
@@ -239,7 +239,7 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:24px 0}
         <h3>Last step: review &amp; send your order</h3>
         <div class="summary" id="sum" style="margin-top:8px"><p style="color:var(--muted);font-size:14px">Your bag is empty. Add items to get started.</p></div>
         <label class="check"><input type="checkbox" id="c1" required><span>I understand that random items (cards, blind boxes, gasha keychains) can't be chosen, and that orders can't be cancelled once the item is bought.</span></label>
-        <label class="check"><input type="checkbox" id="c2" required><span>I'll pay the full amount via GCash by Nov 14, 2026, and pay local shipping separately when my order ships.</span></label>
+        <label class="check"><input type="checkbox" id="c2" required><span>I'll pay the full amount via GCash once you confirm my order, and pay local shipping separately when my order ships.</span></label>
       </div>
       <div class="err" id="err"></div>
       <div class="acts"><button class="btn" type="submit">Review &amp; send my order →</button></div>
@@ -292,11 +292,13 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:24px 0}
 <script>
 /* ===== SETTINGS: edit these ===== */
 /* Change PAGE_VERSION whenever you change anything on this page (text too), so old saved copies in TikTok/IG reload. */
-const PAGE_VERSION = '2026-11-14 orders closed notice';
+const PAGE_VERSION = '2026-11-17 yoonighty caps';
 const RATE = 1.92;     // pesos per baht (locked)
 const MARKUP = 0.12;   // service fee
 /* "taken" = slots already confirmed/paid. Update as orders come in. */
 const FANCON = [
+  {id:'yo_brown', name:'Yoonighty YO★ Cap (Beige / Brown)', thb:0, fixed:1100, max:1, taken:0, onhand:true, meta:'On hand, bought in Bangkok · ships from Nov 21', tag:'On hand'},
+  {id:'yo_grey', name:'Yoonighty YO★ Cap (White / Grey)', thb:0, fixed:1100, max:1, taken:0, onhand:true, meta:'On hand, bought in Bangkok · ships from Nov 21', tag:'On hand'},
   {id:'gasha', name:'GMMTV Gasha Flip Acrylic Keychain', thb:200, fixed:475, closed:true, max:10, taken:0, meta:'≈ 4.7 cm · 1 random gasha capsule · 7 designs (1 secret)', tag:'Random'},
   {id:'card',  name:'Collectible Random Card', thb:200, fixed:550, closed:true, max:10, taken:0, meta:'5.5 × 8.5 cm · random 10 of 35 cards per pack', tag:'Random'},
   {id:'tps',   name:'Transparent Photo Set', thb:390, closed:true, max:10, taken:0, meta:'4 transparent photocards, 2 photo strips, 1 photo keychain'},
@@ -400,12 +402,12 @@ function renderPrefs(){
   if(!ids.length){el.innerHTML='<p style="color:var(--muted);font-size:14px">Add items above and your choices will show here.</p>';return}
   el.innerHTML = ids.map(id=>{
     const i=ALL[id]; const p=prefs[id]||(prefs[id]={mode:'refund',swap:''});
-    const canSwap = i.src==='fancon';
+    const canSwap = i.src==='fancon' && !i.onhand;
     return `<div class="pref"><div class="nm">${i.name}</div><div class="radios">
       <label><input type="radio" name="p_${id}" value="refund" ${p.mode==='refund'?'checked':''}> Full refund</label>
       ${canSwap?`<label><input type="radio" name="p_${id}" value="swap" ${p.mode==='swap'?'checked':''}> Swap for a GMMTV Shop item</label>`:''}
     </div>${canSwap&&p.mode==='swap'?`<select data-swap="${id}" aria-label="Backup item for ${i.name}">${swapOptions(p.swap)}</select>`:''}
-    ${!canSwap?'<div class="meta" style="font-size:12.5px;color:var(--muted);margin-top:4px">GMMTV Shop items are refunded in full if sold out.</div>':''}</div>`;
+    ${!canSwap?`<div class="meta" style="font-size:12.5px;color:var(--muted);margin-top:4px">${i.onhand?'On-hand item: refunded in full if it\'s already been sold.':'GMMTV Shop items are refunded in full if sold out.'}</div>`:''}</div>`;
   }).join('');
 }
 
@@ -468,7 +470,7 @@ Courier: ${$('f-courier')}
 PAYMENT (GCash, full payment)
 Account name: ${$('f-gname')}
 Reference no.: ${$('f-ref')||'(will send after paying)'}
-Agreed: no cancellation after purchase; random items as-is; pay by Nov 14; shipping paid separately.`;
+Agreed: no cancellation after purchase; random items as-is; pay in full once confirmed; shipping paid separately.`;
   document.getElementById('oid').textContent=oid;
   document.getElementById('otext').textContent=txt;
   document.getElementById('copymsg').textContent='';document.getElementById('sent').checked=false;document.getElementById('donebox').classList.add('hidden');
