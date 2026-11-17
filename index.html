@@ -122,6 +122,9 @@ fieldset{border:0;padding:0;margin:0}
 .faq p{margin:8px 0 0;color:var(--muted);font-size:14px}
 footer{text-align:center;color:var(--muted);font-size:13px;padding:24px 0}
 .hidden{display:none!important}
+.ship{font-size:12.5px;line-height:1.35;padding:6px 9px;border-radius:10px;margin-top:2px}
+.ship.s-a{background:#e6f6ec;color:#2f6b47}.ship.s-b{background:#fff4d6;color:#7a5500}.ship.s-c{background:#f1e8ff;color:#5b3a99}
+.legend{display:grid;gap:6px;margin:0 0 14px}
 .final{background:var(--pink);border:1.5px solid var(--pink-2)!important;border-radius:16px;padding:14px 16px!important;margin-top:18px}
 .final .summary table td{border-color:var(--pink-2)}
 .sendsteps{margin:10px 0;padding:0;list-style:none;counter-reset:s}
@@ -159,7 +162,7 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:24px 0}
     <div class="step"><div class="n">1</div><h3>Pick your items</h3><p>Add items below. All prices are in pesos.</p></div>
     <div class="step"><div class="n">2</div><h3>Fill in your details</h3><p>Tell us where to ship and what to do if an item sells out.</p></div>
     <div class="step"><div class="n">3</div><h3>DM us your order</h3><p>Copy your order summary and send it to <b>@csmrzrzr</b> on IG or TikTok. We'll confirm your slots.</p></div>
-    <div class="step"><div class="n">4</div><h3>Pay in full via GCash</h3><p>Once we confirm, scan our GCash QR and send your screenshot + reference number. Pay in full once we confirm.</p></div>
+    <div class="step"><div class="n">4</div><h3>Pay in full via GCash</h3><p>Once we confirm, scan our GCash QR and send your screenshot + reference number.</p></div>
   </div>
 </section>
 
@@ -173,6 +176,12 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:24px 0}
       <button class="on" data-tab="fancon" role="tab">Fancon merch</button>
       <button data-tab="shop" role="tab" class="hidden">GMMTV Shop MuvMuv</button>
     </div>
+  </div>
+  <div class="legend">
+    <div class="ship s-a">🟢 <b>A · In stock</b>: GMMTV ships in 5–10 working days</div>
+    <div class="ship s-b">🟡 <b>B · Pre-order</b>: Acrylic Photo Display Set, GMMTV ships mid December 2026</div>
+    <div class="ship s-c">🟣 <b>C · Pre-order</b>: Talkie MuvMuv Doll, GMMTV ships mid February 2027</div>
+    <div class="meta" style="font-size:12.5px;color:var(--muted)">We order A, B and C separately so in-stock items aren't held back by pre-orders. Each group is sent to you as soon as it arrives.</div>
   </div>
   <div id="grid" class="grid"></div>
   <p id="shopnote" class="note mint hidden" style="margin-top:14px">These were <b>in stock on the GMMTV Shop website as of Oct 30, 2026</b>. We'll buy them at the GMMTV Shop while we're in Bangkok (Nov 13–20). Stock can change before then, so the same refund-or-swap choice applies.</p>
@@ -290,22 +299,22 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:24px 0}
 <script>
 /* ===== SETTINGS: edit these ===== */
 /* Change PAGE_VERSION whenever you change anything on this page (text too), so old saved copies in TikTok/IG reload. */
-const PAGE_VERSION = '2026-11-17 round 2 no tee';
+const PAGE_VERSION = '2026-11-17 round 2 status A-C';
 const RATE = 1.92;     // pesos per baht (locked)
 const MARKUP = 0.12;   // service fee
 /* "taken" = slots already confirmed/paid. Update as orders come in. */
 const FANCON = [
-  {id:'yo_brown', name:'Yoonighty YO★ Cap (Beige / Brown)', thb:0, fixed:1100, max:3, taken:0, onhand:true, meta:'On hand, bought in Bangkok · ships from Nov 21', tag:'On hand'},
-  {id:'yo_grey', name:'Yoonighty YO★ Cap (White / Grey)', thb:0, fixed:1100, max:3, taken:0, onhand:true, meta:'On hand, bought in Bangkok · ships from Nov 21', tag:'On hand'},
-  {id:'talkie',name:'Talkie MuvMuv Doll Keychain', thb:990, max:5, taken:0, meta:'17 cm · 14 voice messages · Pre-order: GMMTV ships mid February 2027', tag:'Pre-order'},
-  {id:'acrylic',name:'Acrylic Photo Display Set', thb:650, max:5, taken:0, meta:'19 × 14.8 cm · photocard 5.5 × 8.5 cm · Pre-order: GMMTV ships mid December 2026', tag:'Pre-order'},
-  {id:'holder',name:'MuvMuv Card Holder with Photocard', thb:350, max:5, taken:0, meta:'12 × 14.7 cm · photocard 5.5 × 8.5 cm · In stock at GMMTV Shop'},
-  {id:'tps',   name:'Transparent Photo Set', thb:370, max:10, taken:0, meta:'4 transparent photocards, 1 photo strip, 1 photo keychain · In stock at GMMTV Shop'},
-  {id:'randoll',name:'MuvMuv Random Doll Keychain (single box)', thb:450, max:6, taken:0, meta:'1 sealed blind box · 7 designs (1 secret) · In stock at GMMTV Shop', tag:'Random'},
-  {id:'randoll_set',name:'MuvMuv Random Doll Keychain (whole set, 6 boxes)', thb:2700, max:3, taken:0, meta:'6 sealed blind boxes · 7 designs (1 secret) · In stock at GMMTV Shop', tag:'Random'},
-  {id:'headband',name:'MuvMuv Headband', thb:200, max:5, taken:0, meta:'≈ 24 × 5.5 cm · In stock at GMMTV Shop'},
-  {id:'bag',   name:'MuvMuv Journey Bag', thb:1290, max:5, taken:0, meta:'31 × 24 × 12 cm · with postcard · In stock at GMMTV Shop'},
-  {id:'strap', name:'MuvMuv Rubber Phone Strap', thb:250, max:5, taken:0, meta:'2.3 × 20.8 cm · In stock at GMMTV Shop'},
+  {id:'yo_brown', ship:'onhand', name:'Yoonighty YO★ Cap (Beige / Brown)', thb:0, fixed:1100, max:3, taken:0, onhand:true, meta:'On hand, bought in Bangkok', tag:'On hand'},
+  {id:'yo_grey', ship:'onhand', name:'Yoonighty YO★ Cap (White / Grey)', thb:0, fixed:1100, max:3, taken:0, onhand:true, meta:'On hand, bought in Bangkok', tag:'On hand'},
+  {id:'talkie',ship:'C', name:'Talkie MuvMuv Doll Keychain', thb:990, max:5, taken:0, meta:'17 cm · 14 voice messages', tag:'Pre-order'},
+  {id:'acrylic',ship:'B', name:'Acrylic Photo Display Set', thb:650, max:5, taken:0, meta:'19 × 14.8 cm · photocard 5.5 × 8.5 cm', tag:'Pre-order'},
+  {id:'holder',ship:'A', name:'MuvMuv Card Holder with Photocard', thb:350, max:5, taken:0, meta:'12 × 14.7 cm · photocard 5.5 × 8.5 cm'},
+  {id:'tps',   ship:'A', name:'Transparent Photo Set', thb:370, max:10, taken:0, meta:'4 transparent photocards, 1 photo strip, 1 photo keychain'},
+  {id:'randoll',ship:'A', name:'MuvMuv Random Doll Keychain (single box)', thb:450, max:6, taken:0, meta:'1 sealed blind box · 7 designs (1 secret)', tag:'Random'},
+  {id:'randoll_set',ship:'A', name:'MuvMuv Random Doll Keychain (whole set, 6 boxes)', thb:2700, max:3, taken:0, meta:'6 sealed blind boxes · 7 designs (1 secret)', tag:'Random'},
+  {id:'headband',ship:'A', name:'MuvMuv Headband', thb:200, max:5, taken:0, meta:'≈ 24 × 5.5 cm'},
+  {id:'bag',   ship:'A', name:'MuvMuv Journey Bag', thb:1290, max:5, taken:0, meta:'31 × 24 × 12 cm · with postcard'},
+  {id:'strap', ship:'A', name:'MuvMuv Rubber Phone Strap', thb:250, max:5, taken:0, meta:'2.3 × 20.8 cm'},
   {id:'card',  name:'Collectible Random Card', thb:200, fixed:550, closed:true, max:10, taken:0, meta:'Sold out at GMMTV Shop', tag:'Random'},
   {id:'gasha', name:'GMMTV Gasha Flip Acrylic Keychain', thb:200, fixed:475, closed:true, max:10, taken:0, meta:'≈ 4.7 cm · 1 random gasha capsule · 7 designs (1 secret)', tag:'Random'}
 ];
@@ -330,8 +339,15 @@ const PRISTINE = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
 const SLOTS = (()=>{try{return JSON.parse(document.getElementById('slots-state').textContent.replace('/*SLOTS*/','').replace('/*/SLOTS*/',''))||{}}catch(_){return {}}})();
 const SIZE_NOTE = {s_pajamas:'Size options vary. Tell us your size in the special request box.'};
 
+const SHIP = {
+  A:{cls:'s-a', txt:'🟢 <b>A · In stock</b> at GMMTV · ships in 5–10 working days'},
+  B:{cls:'s-b', txt:'🟡 <b>B · Pre-order</b> · GMMTV ships mid December 2026'},
+  C:{cls:'s-c', txt:'🟣 <b>C · Pre-order</b> · GMMTV ships mid February 2027'},
+  onhand:{cls:'s-a', txt:'🟢 <b>On hand</b> · ships from Nov 21'}
+};
+// price = (baht + 12% markup in baht) × ₱1.92, rounded up to the peso
 const price = i => i.fixed || php(i.thb);
-const php = thb => Math.ceil(Math.round(thb*RATE*(1+MARKUP)*100)/100);
+const php = thb => { const withFee = thb*(1+MARKUP); return Math.ceil(Math.round(withFee*RATE*100)/100); };
 const peso = n => '₱' + n.toLocaleString('en-PH');
 const baht = n => '฿' + n.toLocaleString('en-US');
 const ALL = {}; FANCON.forEach(i=>{i.src='fancon';ALL[i.id]=i}); SHOP.forEach(i=>{i.src='shop';ALL[i.id]=i});
@@ -359,7 +375,7 @@ function itemCard(i){
   const tag = i.closed?'<span class="tag" style="background:#3a2f36;color:#fff">Cut off</span>':i.tag?`<span class="tag pink">${i.tag}</span>`:(i.src==='fancon'?'<span class="tag">Fancon exclusive</span>':'<span class="tag">GMMTV Shop</span>');
   return `<article class="item ${q?'inbag':''}" ${i.closed?'style="opacity:.6"':''}>
     <div class="ph"><img src="${img}" alt="${i.name}" loading="lazy"></div>
-    <div class="bd">${tag}<h3>${i.name}</h3>${i.meta?`<div class="meta">${i.meta}</div>`:''}${SIZE_NOTE[i.id]?`<div class="meta">${SIZE_NOTE[i.id]}</div>`:''}
+    <div class="bd">${tag}<h3>${i.name}</h3>${i.meta?`<div class="meta">${i.meta}</div>`:''}${SIZE_NOTE[i.id]?`<div class="meta">${SIZE_NOTE[i.id]}</div>`:''}${i.ship&&!i.closed?`<div class="ship ${SHIP[i.ship].cls}">${SHIP[i.ship].txt}</div>`:''}
     <div class="price"><span class="php">${peso(price(i))}</span></div>
     <div class="slots ${slotCls}">${slotTxt}</div>${controls}</div></article>`;
 }
