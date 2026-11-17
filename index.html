@@ -266,7 +266,7 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:24px 0}
 
 <div class="bar" id="bar">
   <div class="wrap">
-    <div class="t" id="bartext">0 items · ₱0<small>Shipping billed separately</small></div>
+    <div class="t" id="bartext">0 items · ₱0<small>Local PH shipping billed separately</small></div>
     <button class="btn" type="button" id="bar-go">Review &amp; send my order →</button>
   </div>
 </div>
@@ -299,22 +299,22 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:24px 0}
 <script>
 /* ===== SETTINGS: edit these ===== */
 /* Change PAGE_VERSION whenever you change anything on this page (text too), so old saved copies in TikTok/IG reload. */
-const PAGE_VERSION = '2026-11-17 round 2 status A-C';
+const PAGE_VERSION = '2026-11-17 round 2 shipping included';
 const RATE = 1.92;     // pesos per baht (locked)
 const MARKUP = 0.12;   // service fee
 /* "taken" = slots already confirmed/paid. Update as orders come in. */
 const FANCON = [
   {id:'yo_brown', ship:'onhand', name:'Yoonighty YO★ Cap (Beige / Brown)', thb:0, fixed:1100, max:3, taken:0, onhand:true, meta:'On hand, bought in Bangkok', tag:'On hand'},
   {id:'yo_grey', ship:'onhand', name:'Yoonighty YO★ Cap (White / Grey)', thb:0, fixed:1100, max:3, taken:0, onhand:true, meta:'On hand, bought in Bangkok', tag:'On hand'},
-  {id:'talkie',ship:'C', name:'Talkie MuvMuv Doll Keychain', thb:990, max:5, taken:0, meta:'17 cm · 14 voice messages', tag:'Pre-order'},
-  {id:'acrylic',ship:'B', name:'Acrylic Photo Display Set', thb:650, max:5, taken:0, meta:'19 × 14.8 cm · photocard 5.5 × 8.5 cm', tag:'Pre-order'},
-  {id:'holder',ship:'A', name:'MuvMuv Card Holder with Photocard', thb:350, max:5, taken:0, meta:'12 × 14.7 cm · photocard 5.5 × 8.5 cm'},
-  {id:'tps',   ship:'A', name:'Transparent Photo Set', thb:370, max:10, taken:0, meta:'4 transparent photocards, 1 photo strip, 1 photo keychain'},
-  {id:'randoll',ship:'A', name:'MuvMuv Random Doll Keychain (single box)', thb:450, max:6, taken:0, meta:'1 sealed blind box · 7 designs (1 secret)', tag:'Random'},
-  {id:'randoll_set',ship:'A', name:'MuvMuv Random Doll Keychain (whole set, 6 boxes)', thb:2700, max:3, taken:0, meta:'6 sealed blind boxes · 7 designs (1 secret)', tag:'Random'},
-  {id:'headband',ship:'A', name:'MuvMuv Headband', thb:200, max:5, taken:0, meta:'≈ 24 × 5.5 cm'},
-  {id:'bag',   ship:'A', name:'MuvMuv Journey Bag', thb:1290, max:5, taken:0, meta:'31 × 24 × 12 cm · with postcard'},
-  {id:'strap', ship:'A', name:'MuvMuv Rubber Phone Strap', thb:250, max:5, taken:0, meta:'2.3 × 20.8 cm'},
+  {id:'talkie',shipg:300, ship:'C', name:'Talkie MuvMuv Doll Keychain', thb:990, max:5, taken:0, meta:'17 cm · 14 voice messages', tag:'Pre-order'},
+  {id:'acrylic',shipg:400, ship:'B', name:'Acrylic Photo Display Set', thb:650, max:5, taken:0, meta:'19 × 14.8 cm · photocard 5.5 × 8.5 cm', tag:'Pre-order'},
+  {id:'holder',shipg:250, ship:'A', name:'MuvMuv Card Holder with Photocard', thb:350, max:5, taken:0, meta:'12 × 14.7 cm · photocard 5.5 × 8.5 cm'},
+  {id:'tps',   shipg:150, ship:'A', name:'Transparent Photo Set', thb:370, max:10, taken:0, meta:'4 transparent photocards, 1 photo strip, 1 photo keychain'},
+  {id:'randoll',shipg:110, ship:'A', name:'MuvMuv Random Doll Keychain (single box)', thb:450, max:6, taken:0, meta:'1 sealed blind box · 7 designs (1 secret)', tag:'Random'},
+  {id:'randoll_set',shipg:650, ship:'A', name:'MuvMuv Random Doll Keychain (whole set, 6 boxes)', thb:2700, max:3, taken:0, meta:'6 sealed blind boxes · 7 designs (1 secret)', tag:'Random'},
+  {id:'headband',shipg:100, ship:'A', name:'MuvMuv Headband', thb:200, max:5, taken:0, meta:'≈ 24 × 5.5 cm'},
+  {id:'bag',   shipg:600, ship:'A', name:'MuvMuv Journey Bag', thb:1290, max:5, taken:0, meta:'31 × 24 × 12 cm · with postcard'},
+  {id:'strap', shipg:60, ship:'A', name:'MuvMuv Rubber Phone Strap', thb:250, max:5, taken:0, meta:'2.3 × 20.8 cm'},
   {id:'card',  name:'Collectible Random Card', thb:200, fixed:550, closed:true, max:10, taken:0, meta:'Sold out at GMMTV Shop', tag:'Random'},
   {id:'gasha', name:'GMMTV Gasha Flip Acrylic Keychain', thb:200, fixed:475, closed:true, max:10, taken:0, meta:'≈ 4.7 cm · 1 random gasha capsule · 7 designs (1 secret)', tag:'Random'}
 ];
@@ -345,9 +345,11 @@ const SHIP = {
   C:{cls:'s-c', txt:'🟣 <b>C · Pre-order</b> · GMMTV ships mid February 2027'},
   onhand:{cls:'s-a', txt:'🟢 <b>On hand</b> · ships from Nov 21'}
 };
-// price = (baht + 12% markup in baht) × ₱1.92, rounded up to the peso
-const price = i => i.fixed || php(i.thb);
-const php = thb => { const withFee = thb*(1+MARKUP); return Math.ceil(Math.round(withFee*RATE*100)/100); };
+// price = (baht + 12% markup in baht + est. GMMTV shipping to PH in baht) × ₱1.92, rounded up to the peso
+// shipping estimate: item weight (shipg, grams) × SHIP_PER_G. Cart check: 2,250 g = ฿1,060 (≈฿0.47/g) → ฿0.50/g with buffer.
+const SHIP_PER_G = 0.50;
+const price = i => i.fixed || php(i.thb, i.shipg||0);
+const php = (thb, g=0) => { const withFee = thb*(1+MARKUP) + g*SHIP_PER_G; return Math.ceil(Math.round(withFee*RATE*100)/100); };
 const peso = n => '₱' + n.toLocaleString('en-PH');
 const baht = n => '฿' + n.toLocaleString('en-US');
 const ALL = {}; FANCON.forEach(i=>{i.src='fancon';ALL[i.id]=i}); SHOP.forEach(i=>{i.src='shop';ALL[i.id]=i});
@@ -376,7 +378,7 @@ function itemCard(i){
   return `<article class="item ${q?'inbag':''}" ${i.closed?'style="opacity:.6"':''}>
     <div class="ph"><img src="${img}" alt="${i.name}" loading="lazy"></div>
     <div class="bd">${tag}<h3>${i.name}</h3>${i.meta?`<div class="meta">${i.meta}</div>`:''}${SIZE_NOTE[i.id]?`<div class="meta">${SIZE_NOTE[i.id]}</div>`:''}${i.ship&&!i.closed?`<div class="ship ${SHIP[i.ship].cls}">${SHIP[i.ship].txt}</div>`:''}
-    <div class="price"><span class="php">${peso(price(i))}</span></div>
+    <div class="price"><span class="php">${peso(price(i))}</span></div>${i.shipg&&!i.closed?'<div class="meta" style="font-size:12px;color:var(--mint-ink);font-weight:700">✈️ incl. shipping from Thailand</div>':''}
     <div class="slots ${slotCls}">${slotTxt}</div>${controls}</div></article>`;
 }
 
@@ -399,7 +401,7 @@ function lines(){
 
 function renderSummary(){
   const ls=lines(); const n=ls.reduce((a,l)=>a+l.qty,0); const tot=ls.reduce((a,l)=>a+l.total,0);
-  document.getElementById('bartext').innerHTML = `${n} item${n===1?'':'s'} · ${peso(tot)}<small>Shipping billed separately</small>`;
+  document.getElementById('bartext').innerHTML = `${n} item${n===1?'':'s'} · ${peso(tot)}<small>Local PH shipping billed separately</small>`;
   const el=document.getElementById('sum');
   if(!ls.length){el.innerHTML='<p style="color:var(--muted);font-size:14px">Your bag is empty. Add items to get started.</p>';return}
   el.innerHTML='<table>'+ls.map(l=>`<tr><td>${l.qty} × ${l.i.name}${l.size?` (${l.size})`:''}<div class="meta" style="font-size:12px;color:var(--muted)">${peso(l.unit)} each</div></td><td class="r">${peso(l.total)}</td></tr>`).join('')+
@@ -467,7 +469,7 @@ MilkLove Fancon / MuvMuv · Bangkok Nov 2026
 
 ITEMS
 ${ls.map(l=>`- ${l.qty} x ${l.i.name}${l.size?' ('+l.size+')':''} @ ${peso(l.unit)} = ${peso(l.total)}`).join('\n')}
-ITEM TOTAL: ${peso(tot)} (shipping billed separately)
+ITEM TOTAL: ${peso(tot)} (incl. shipping from Thailand; local PH shipping billed separately)
 
 IF SOLD OUT
 ${prefTxt}
