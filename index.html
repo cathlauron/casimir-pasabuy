@@ -299,7 +299,7 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:24px 0}
 <script>
 /* ===== SETTINGS: edit these ===== */
 /* Change PAGE_VERSION whenever you change anything on this page (text too), so old saved copies in TikTok/IG reload. */
-const PAGE_VERSION = '2026-11-17 namtanfilm tab';
+const PAGE_VERSION = '2026-11-18 prices rounded to nearest 10';
 const RATE = 1.92;     // pesos per baht (locked)
 const MARKUP = 0.12;   // service fee
 /* "taken" = slots already confirmed/paid. Update as orders come in. */
@@ -362,7 +362,7 @@ const SHIP = {
 // shipping estimate: item weight (shipg, grams) × SHIP_PER_G. Cart check: 2,250 g = ฿1,060 (≈฿0.47/g) → ฿0.50/g with buffer.
 const SHIP_PER_G = 0.50;
 const price = i => i.fixed || php(i.thb, i.shipg||0);
-const php = (thb, g=0) => { const withFee = thb*(1+MARKUP) + g*SHIP_PER_G; return Math.ceil(Math.round(withFee*RATE*100)/100); };
+const php = (thb, g=0) => { const withFee = thb*(1+MARKUP) + g*SHIP_PER_G; return Math.round(Math.ceil(Math.round(withFee*RATE*100)/100)/10)*10; }; // rounded to the nearest ₱10
 const peso = n => '₱' + n.toLocaleString('en-PH');
 const baht = n => '฿' + n.toLocaleString('en-US');
 const ALL = {}; FANCON.forEach(i=>{i.src='fancon';ALL[i.id]=i}); SHOP.forEach(i=>{i.src='shop';ALL[i.id]=i}); NAMTAN.forEach(i=>{i.src='namtan';ALL[i.id]=i});
