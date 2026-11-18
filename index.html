@@ -108,7 +108,7 @@ fieldset{border:0;padding:0;margin:0}
 .bar{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1.5px solid var(--line);box-shadow:0 -6px 20px rgba(120,60,90,.08);z-index:20}
 .bar .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-top:12px;padding-bottom:12px}
 .bar .t{font-weight:800}
-.bar .t small{display:block;font-weight:600;color:var(--muted);font-size:12.5px}
+.bar .t small{display:block;font-weight:600;color:var(--muted);font-size:12.5px;white-space:nowrap}
 .bar .btn{white-space:nowrap}
 @media (max-width:480px){.bar .btn{padding:12px 15px;font-size:14px}.bar .t{font-size:14px}.bar .t small{font-size:11.5px}}
 .modal{position:fixed;inset:0;background:rgba(58,47,54,.45);display:none;align-items:center;justify-content:center;padding:16px;z-index:50}
@@ -299,7 +299,7 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:24px 0}
 <script>
 /* ===== SETTINGS: edit these ===== */
 /* Change PAGE_VERSION whenever you change anything on this page (text too), so old saved copies in TikTok/IG reload. */
-const PAGE_VERSION = '2026-11-18 desktop centring + shipping note';
+const PAGE_VERSION = '2026-11-18 summary wording';
 const RATE = 1.92;     // pesos per baht (locked)
 const MARKUP = 0.12;   // service fee
 /* "taken" = slots already confirmed/paid. Update as orders come in. */
@@ -419,7 +419,7 @@ function renderSummary(){
   const el=document.getElementById('sum');
   if(!ls.length){el.innerHTML='<p style="color:var(--muted);font-size:14px">Your bag is empty. Add items to get started.</p>';return}
   el.innerHTML='<table>'+ls.map(l=>`<tr><td>${l.qty} × ${l.i.name}${l.size?` (${l.size})`:''}<div class="meta" style="font-size:12px;color:var(--muted)">${peso(l.unit)} each</div></td><td class="r">${peso(l.total)}</td></tr>`).join('')+
-    `<tr class="tot"><td>Item total</td><td class="r">${peso(tot)}</td></tr></table><p style="font-size:12.5px;color:var(--muted);margin:6px 0 0">+ local shipping, billed when your order ships (from Nov 21).</p>`;
+    `<tr class="tot"><td>Item total</td><td class="r">${peso(tot)}</td></tr></table><p style="font-size:12.5px;color:var(--muted);margin:6px 0 0">+ local shipping, billed when your order ships.</p>`;
 }
 
 function swapOptions(sel){
