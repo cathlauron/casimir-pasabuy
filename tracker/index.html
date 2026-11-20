@@ -74,6 +74,7 @@ tr.open td{background:#fff5f8}
     <button class="on" data-tab="orders">Orders</button>
     <button data-tab="buy">Buying list</button>
     <button data-tab="profit">Profit</button>
+    <button data-tab="ship">Shipping list</button>
   </div>
 </header>
 
@@ -118,6 +119,17 @@ tr.open td{background:#fff5f8}
     <h2 style="font-size:19px;margin-bottom:4px">What to buy</h2>
     <p style="margin:0 0 10px;font-size:13.5px;color:var(--muted)">Totals from all orders that aren't cancelled. <b>Paid</b> is what you must buy; <b>Not paid yet</b> is still waiting on GCash.</p>
     <div class="tbl"><table class="blist"><thead><tr><th>Item</th><th class="right">Paid</th><th class="right">Not paid yet</th><th class="right">Total</th></tr></thead><tbody id="buyrows"></tbody></table></div>
+  </div>
+</div>
+
+<div id="tab-ship" class="hidden">
+  <div class="card">
+    <div class="row" style="justify-content:space-between;align-items:flex-start;gap:10px">
+      <div><h2 style="font-size:19px;margin-bottom:4px">Shipping list</h2>
+      <p style="margin:0 0 10px;font-size:13.5px;color:var(--muted)">One parcel per buyer, grouped by region. Set an order's <b>Parcel</b>, <b>Region</b> and <b>Items to ship</b> in its details (Orders tab). Orders with the same parcel number are packed together.</p></div>
+      <button class="btn ghost sm" id="copyship">Copy list</button>
+    </div>
+    <div id="shiplist"></div>
   </div>
 </div>
 
@@ -307,7 +319,10 @@ function detailHTML(o){
       <label>Status</label>${sel('shipStatus',SHIP,o.shipStatus)}
       <label>Shipping fee (₱)</label>${inp('shipFee',o.shipFee,'number')}
       <label style="display:flex;gap:8px;align-items:center"><input data-f="shipFeePaid" type="checkbox" style="width:auto" ${o.shipFeePaid?'checked':''}> Shipping fee paid</label>
-      <label>Tracking no.</label>${inp('tracking',o.tracking)}</div>
+      <label>Tracking no.</label>${inp('tracking',o.tracking)}
+      <label>Parcel no. (same no. = packed together; "none" = nothing to ship)</label>${inp('parcel',o.parcel,'text','e.g. P3')}
+      <label>Region</label>${inp('region',o.region,'text','e.g. Central Luzon')}
+      <label>Items to ship</label>${inp('shipItems',o.shipItems,'text','what goes in the box')}</div>
     <div style="grid-column:1/-1"><label>Notes</label>${inp('notes',o.notes,'text','Anything to remember')}
       <div class="row" style="margin-top:10px;justify-content:space-between">
         <span class="saving">Added ${o.created?new Date(o.created).toLocaleString('en-PH',{dateStyle:'medium',timeStyle:'short'}):''}</span>
@@ -334,7 +349,45 @@ function renderBuy(){
   const keys=Object.keys(t).sort();
   document.getElementById('buyrows').innerHTML=keys.length?keys.map(k=>`<tr><td>${esc(k)}</td><td class="right"><b>${t[k].paid}</b></td><td class="right">${t[k].unpaid}</td><td class="right">${t[k].paid+t[k].unpaid}</td></tr>`).join(''):'<tr><td colspan="4" class="empty">No items yet.</td></tr>';
 }
-function renderAll(){renderStats();renderRows();renderBuy();renderProfit()}
+function parcelNo(p){const m=String(p||'').match(/\d+/);return m?+m[0]:9999}
+function shipGroups(){
+  const by={};
+  for(const o of orders){ if(o.payStatus==='Cancelled') continue; const p=(o.parcel||'').trim(); const key=p||'__none__';
+    (by[key]=by[key]||[]).push(o);}
+  const parcels=Object.keys(by).filter(k=>k!=='__none__'&&k.toLowerCase()!=='none').sort((a,b)=>parcelNo(a)-parcelNo(b));
+  return {by,parcels};
+}
+function renderShip(){
+  const el=document.getElementById('shiplist'); if(!el) return;
+  const {by,parcels}=shipGroups();
+  let html='', lastRegion=null;
+  for(const p of parcels){ const os=by[p]; const f=os.find(o=>o.address)||os[0]; const region=(os.find(o=>o.region)||{}).region||'Unsorted';
+    if(region!==lastRegion){ html+=`<h3 style="margin:16px 0 6px;color:var(--mint-ink);font-size:16px">${esc(region)}</h3>`; lastRegion=region; }
+    const items=[...new Set(os.map(o=>o.shipItems).filter(Boolean))].join('; ')||itemsShort(f);
+    const shipped=os.every(o=>o.shipStatus==='Shipped'||o.shipStatus==='Delivered');
+    const tr=[...new Set(os.map(o=>o.tracking).filter(Boolean))].join(', ');
+    html+=`<div class="card" style="margin:6px 0;padding:12px 14px">
+      <div class="row" style="justify-content:space-between;gap:8px"><b>${esc(p)} · ${esc(f.buyer)}</b><span class="pill ${shipped?'s-ship':'s-no'}">${shipped?'Shipped':'Not shipped'}${tr?' · '+esc(tr):''}</span></div>
+      <div style="font-size:13.5px;margin-top:4px">📞 ${esc(f.mobile)} · ${esc(f.courier||'')}</div>
+      <div style="font-size:13.5px">📍 ${esc(f.address)}</div>
+      <div style="font-size:13.5px;margin-top:4px">📦 ${esc(items)}</div>
+      <div class="saving" style="margin-top:4px">${os.map(o=>esc(o.oid)).join(' + ')}</div></div>`; }
+  const none=[...(by['__none__']||[]).filter(o=>!o.parcel), ...Object.keys(by).filter(k=>k.toLowerCase()==='none').flatMap(k=>by[k])];
+  const skip=none.filter(o=>String(o.parcel||'').toLowerCase()==='none'), unassigned=none.filter(o=>!o.parcel);
+  if(skip.length) html+=`<h3 style="margin:16px 0 6px;color:var(--muted);font-size:15px">Nothing to ship</h3><div style="font-size:13.5px;color:var(--muted)">${skip.map(o=>esc(o.buyer)+' ('+esc(o.oid)+')'+(o.notes?' · '+esc(o.notes):'')).join('<br>')}</div>`;
+  if(unassigned.length) html+=`<h3 style="margin:16px 0 6px;color:#8a5a00;font-size:15px">Not assigned to a parcel yet</h3><div style="font-size:13.5px">${unassigned.map(o=>esc(o.buyer)+' ('+esc(o.oid)+') · '+esc(itemsShort(o))).join('<br>')}</div>`;
+  el.innerHTML=html||'<div class="empty">No parcels yet.</div>';
+}
+function shipText(){
+  const {by,parcels}=shipGroups(); let out='', lastRegion=null;
+  for(const p of parcels){const os=by[p];const f=os.find(o=>o.address)||os[0];const region=(os.find(o=>o.region)||{}).region||'Unsorted';
+    if(region!==lastRegion){out+=(out?'\n':'')+region.toUpperCase()+'\n';lastRegion=region}
+    const items=[...new Set(os.map(o=>o.shipItems).filter(Boolean))].join('; ')||itemsShort(f);
+    out+=`${p} · ${f.buyer} · ${f.mobile}\n${f.address}\n${items}\n(${os.map(o=>o.oid).join(' + ')})\n\n`;}
+  return out.trim();
+}
+document.getElementById('copyship').addEventListener('click',async()=>{try{await navigator.clipboard.writeText(shipText());saving('Shipping list copied ✓')}catch(_){saving('Could not copy')}});
+function renderAll(){renderStats();renderRows();renderBuy();renderProfit();renderShip()}
 
 /* ---------- writes ---------- */
 const saving=s=>document.getElementById('saving').textContent=s;
@@ -409,7 +462,7 @@ document.getElementById('addblank').addEventListener('click',()=>{
 for(const id of ['q','fpay','fship','frefund']) document.getElementById(id).addEventListener('input',renderRows);
 document.querySelectorAll('.tabs button').forEach(b=>b.addEventListener('click',()=>{
   tab=b.dataset.tab;document.querySelectorAll('.tabs button').forEach(x=>x.classList.toggle('on',x===b));
-  for(const t of ['orders','buy','profit']) document.getElementById('tab-'+t).classList.toggle('hidden',tab!==t);
+  for(const t of ['orders','buy','profit','ship']) document.getElementById('tab-'+t).classList.toggle('hidden',tab!==t);
 }));
 document.getElementById('csv').addEventListener('click',async()=>{
   const cols=['oid','created','buyer','handle','mobile','email','address','courier','items','itemTotal','prefs','payStatus','amountPaid','gname','gcashRef','buyStatus','swapNotes','profitAdj','refundStatus','refundDue','refundRef','shipStatus','shipFee','shipFeePaid','tracking','notes'];
