@@ -49,7 +49,7 @@ section{margin:26px 0}
 .tabs{display:inline-flex;background:#fff;border:1.5px solid var(--line);border-radius:999px;padding:4px}
 .tabs button{border:0;background:none;font:700 14px Nunito;padding:8px 14px;border-radius:999px;cursor:pointer;color:var(--muted)}
 .tabs button.on{background:var(--pink-ink);color:#fff}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px;align-items:start}
 .item{background:#fff;border:1.5px solid var(--line);border-radius:var(--radius);overflow:hidden;display:flex;flex-direction:column;transition:border-color .15s,box-shadow .15s}
 .item.inbag{border-color:var(--pink-2);box-shadow:0 0 0 3px var(--pink)}
 .item .ph{position:relative;aspect-ratio:4/3;background:#fff;overflow:hidden;border-bottom:1.5px solid var(--line)}
@@ -302,7 +302,7 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:24px 0}
 <script>
 /* ===== SETTINGS: edit these ===== */
 /* Change PAGE_VERSION whenever you change anything on this page (text too), so old saved copies in TikTok/IG reload. */
-const PAGE_VERSION = '2026-11-23 janjingjing tab';
+const PAGE_VERSION = '2026-11-23 jj tee split';
 const RATE = 1.92;     // pesos per baht (locked)
 const MARKUP = 0.12;   // service fee
 /* "taken" = slots already confirmed/paid. Update as orders come in. */
@@ -324,7 +324,8 @@ const FANCON = [
 const JJ = [
   {id:'jj_doll', ship:'E', shipg:300, name:'JanJingJing Jewel Vixen Rouge Doll Keychain', thb:890, max:5, taken:0, meta:'17 cm', tag:'Pre-order'},
   {id:'jj_acrylic', ship:'D', shipg:400, name:'JanJingJing Acrylic Photo Display Set', thb:650, max:5, taken:0, meta:'19 × 13.4 cm · with photocard 5.5 × 8.5 cm', tag:'Pre-order'},
-  {id:'jj_tee', ship:'D', shipg:250, name:'JanJingJing Official T-Shirt', thb:750, max:5, taken:0, meta:'White or black version · with postcard 5 × 7 in', sizes:['White S','White M','White L','White XL','White XXL','Black S','Black M','Black L','Black XL','Black XXL'], tag:'Pre-order'},
+  {id:'jj_tee_white', ship:'D', shipg:250, name:'JanJingJing Official T-Shirt (White)', thb:750, max:5, taken:0, meta:'White version · with postcard 5 × 7 in', sizes:['S','M','L','XL','XXL'], tag:'Pre-order'},
+  {id:'jj_tee_black', ship:'D', shipg:250, name:'JanJingJing Official T-Shirt (Black)', thb:750, max:5, taken:0, meta:'Black version · with postcard 5 × 7 in', sizes:['S','M','L','XL','XXL'], tag:'Pre-order'},
   {id:'jj_tps', ship:'A', shipg:150, name:'JanJingJing Transparent Photo Set', thb:390, max:10, taken:0, meta:'4 transparent photocards, 2 photo strips, 1 photo keychain'},
   {id:'jj_plush', ship:'A', shipg:500, name:'Jewel Huggables Plush', thb:1190, max:5, taken:0, meta:'44 cm'},
   {id:'jj_randoll', ship:'A', shipg:110, name:'Jewel Random Doll Keychain (single box)', thb:450, max:6, taken:0, meta:'1 sealed blind box · 7 designs (1 secret)', tag:'Random'},
@@ -408,7 +409,7 @@ function itemCard(i){
   }
   const tag = i.closed?'<span class="tag" style="background:#3a2f36;color:#fff">Cut off</span>':i.tag?`<span class="tag pink">${i.tag}</span>`:(i.src!=='shop'?'<span class="tag">Fancon exclusive</span>':'<span class="tag">GMMTV Shop</span>');
   return `<article class="item ${q?'inbag':''}" ${i.closed?'style="opacity:.6"':''}>
-    <div class="ph"><img src="${img}" alt="${i.name}" loading="lazy"></div>
+    <div class="ph"><img src="${img}" alt="${i.name}"></div>
     <div class="bd">${tag}<h3>${i.name}</h3>${i.meta?`<div class="meta">${i.meta}</div>`:''}${SIZE_NOTE[i.id]?`<div class="meta">${SIZE_NOTE[i.id]}</div>`:''}${i.ship&&!i.closed?`<div class="ship ${SHIP[i.ship].cls}">${SHIP[i.ship].txt}</div>`:''}
     <div class="price"><span class="php">${peso(price(i))}</span></div>
     <div class="slots ${slotCls}">${slotTxt}</div>${controls}</div></article>`;
