@@ -302,7 +302,7 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:24px 0}
 <script>
 /* ===== SETTINGS: edit these ===== */
 /* Change PAGE_VERSION whenever you change anything on this page (text too), so old saved copies in TikTok/IG reload. */
-const PAGE_VERSION = '2026-11-23 jj tee split';
+const PAGE_VERSION = '2026-11-24 nf holder sold out';
 const RATE = 1.92;     // pesos per baht (locked)
 const MARKUP = 0.12;   // service fee
 /* "taken" = slots already confirmed/paid. Update as orders come in. */
@@ -334,7 +334,7 @@ const JJ = [
   {id:'jj_bag', ship:'A', shipg:600, name:'Jewel Journey Bag', thb:1290, max:5, taken:0, meta:'31 × 24 × 12 cm · with postcard'},
   {id:'jj_headband', ship:'A', shipg:100, name:'Jewel Headband', thb:200, max:5, taken:0, meta:'≈ 24 × 5.5 cm'},
   {id:'jj_strap', ship:'A', shipg:60, name:'Jewel Rubber Phone Strap', thb:250, max:5, taken:0, meta:'2.5 × 20.8 cm'},
-  {id:'jj_card', name:'JanJingJing Collectible Random Card', thb:200, max:0, taken:0, closed:true, meta:'Sold out at GMMTV', tag:'Random'},
+  {id:'jj_card', soldout:true, name:'JanJingJing Collectible Random Card', thb:200, max:0, taken:0, closed:true, meta:'Sold out at GMMTV', tag:'Random'},
 ];
 const NAMTAN = [
   {id:'nf_talkie', ship:'C', shipg:300, name:'NamtanFilm Talkie Lunar Doll Keychain', thb:990, max:5, taken:0, meta:'15 cm · 14 voice messages (Thai)', tag:'Pre-order'},
@@ -343,7 +343,7 @@ const NAMTAN = [
   {id:'nf_tee', ship:'A', shipg:250, name:'NamtanFilm Official T-Shirt', thb:750, max:5, taken:0, meta:'Black tee with turquoise trim · with postcard', sizes:['S','M','L','XL','XXL']},
   {id:'nf_randoll', ship:'A', shipg:110, name:'NamtanFilm Lunar Random Doll Keychain (single box)', thb:450, max:6, taken:0, meta:'1 sealed blind box · 7 designs (1 secret)', tag:'Random'},
   {id:'nf_randoll_set', ship:'A', shipg:650, name:'NamtanFilm Lunar Random Doll Keychain (whole set, 6 boxes)', thb:2700, max:3, taken:0, meta:'6 sealed blind boxes · 7 designs (1 secret)', tag:'Random'},
-  {id:'nf_holder', ship:'A', shipg:250, name:'NamtanFilm Card Holder with Photocard', thb:350, max:5, taken:0, meta:'12.3 × 14.6 cm · photocard 5.5 × 8.5 cm'},
+  {id:'nf_holder', closed:true, soldout:true, ship:'A', shipg:250, name:'NamtanFilm Card Holder with Photocard', thb:350, max:0, taken:0, meta:'12.3 × 14.6 cm · photocard 5.5 × 8.5 cm'},
   {id:'nf_bag', ship:'A', shipg:600, name:'NamtanFilm Lunar Journey Bag', thb:1290, max:5, taken:0, meta:'31 × 24 × 12 cm · with postcard'},
   {id:'nf_headband', ship:'A', shipg:100, name:'NamtanFilm Lunar Headband', thb:200, max:5, taken:0, meta:'≈ 24 × 5.5 cm'},
   {id:'nf_strap', ship:'A', shipg:60, name:'NamtanFilm Lunar Rubber Phone Strap', thb:250, max:5, taken:0, meta:'2.3 × 20.8 cm'},
@@ -397,7 +397,7 @@ function itemCard(i){
   const img = 'img/'+(i.src==='shop'?'s_'+i.img:i.id)+'.jpg';
   const l = left(i), q = qtyOf(i.id);
   const slotCls = l===0?'out':(l<=2?'low':'');
-  const slotTxt = i.closed?'⛔ Orders cut off for this item':l===0?'Fully reserved':`${l} slot${l>1?'s':''} available`;
+  const slotTxt = i.soldout?'⛔ Sold out':i.closed?'⛔ Orders cut off for this item':l===0?'Fully reserved':`${l} slot${l>1?'s':''} available`;
   let controls;
   if(i.sizes){
     controls = '<div class="sizes">'+i.sizes.map(s=>{
@@ -407,7 +407,7 @@ function itemCard(i){
     const v=bag[i.id]||0;
     controls = `<div class="qty"><button type="button" data-k="${i.id}" data-d="-1" aria-label="Remove one" ${v?'':'disabled'}>−</button><span class="v">${v}</span><button type="button" data-k="${i.id}" data-d="1" aria-label="Add one" ${q<l?'':'disabled'}>+</button></div>`;
   }
-  const tag = i.closed?'<span class="tag" style="background:#3a2f36;color:#fff">Cut off</span>':i.tag?`<span class="tag pink">${i.tag}</span>`:(i.src!=='shop'?'<span class="tag">Fancon exclusive</span>':'<span class="tag">GMMTV Shop</span>');
+  const tag = i.soldout?'<span class="tag" style="background:#b3261e;color:#fff">Sold out</span>':i.closed?'<span class="tag" style="background:#3a2f36;color:#fff">Cut off</span>':i.tag?`<span class="tag pink">${i.tag}</span>`:(i.src!=='shop'?'<span class="tag">Fancon exclusive</span>':'<span class="tag">GMMTV Shop</span>');
   return `<article class="item ${q?'inbag':''}" ${i.closed?'style="opacity:.6"':''}>
     <div class="ph"><img src="${img}" alt="${i.name}"></div>
     <div class="bd">${tag}<h3>${i.name}</h3>${i.meta?`<div class="meta">${i.meta}</div>`:''}${SIZE_NOTE[i.id]?`<div class="meta">${SIZE_NOTE[i.id]}</div>`:''}${i.ship&&!i.closed?`<div class="ship ${SHIP[i.ship].cls}">${SHIP[i.ship].txt}</div>`:''}
