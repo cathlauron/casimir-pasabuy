@@ -123,7 +123,7 @@ fieldset{border:0;padding:0;margin:0}
 footer{text-align:center;color:var(--muted);font-size:13px;padding:24px 0}
 .hidden{display:none!important}
 .ship{font-size:12.5px;line-height:1.35;padding:6px 9px;border-radius:10px;margin-top:2px}
-.ship.s-a{background:#e6f6ec;color:#2f6b47}.ship.s-b{background:#fff4d6;color:#7a5500}.ship.s-c{background:#f1e8ff;color:#5b3a99}.ship.s-d{background:#e3f0ff;color:#1f4f8a}.ship.s-e{background:#ffe9dc;color:#8a3f12}
+.ship.s-a{background:#e6f6ec;color:#2f6b47}.ship.s-b{background:#fff4d6;color:#7a5500}.ship.s-c{background:#f1e8ff;color:#5b3a99}.ship.s-d{background:#e3f0ff;color:#1f4f8a}.ship.s-e{background:#ffe9dc;color:#8a3f12}.ship.s-f{background:#efe6dd;color:#5e4330}
 .legend{display:grid;gap:6px;margin:0 0 14px}
 .final{background:var(--pink);border:1.5px solid var(--pink-2)!important;border-radius:16px;padding:14px 16px!important;margin-top:18px}
 .final .summary table td{border-color:var(--pink-2)}
@@ -145,7 +145,7 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:24px 0}
   <p class="lead">Missed the <b>MilkLove</b>, <b>NamtanFilm</b> or <b>JanJingJing</b> fancon? We'll get the official merch for you and deliver it in the Philippines. Pick what you want, prices are already in pesos.</p>
   <div class="chips">
     <span class="chip">🗓 Cut-off: <b>MilkLove Nov 30 · NamtanFilm Nov 29 · JanJingJing Dec 7</b>, 11:59 PM</span>
-    <span class="chip">🚚 Pre-order items: <b>ship Dec to Feb</b></span>
+    <span class="chip">🚚 Pre-order items: <b>ship Dec to Mar</b></span>
   </div>
   <div class="closed-note" role="status">
     <b>Round 2 is open! 🎉</b> Missed the fancon? Order the official <b>MilkLove</b> fancon merch until <b>Nov 30</b> , <b>NamtanFilm</b> fancon merch until <b>Nov 29</b> and <b>JanJingJing</b> fancon merch until <b>Dec 7</b> (11:59 PM). Yoonighty YO★ caps are also on hand at ₱1,100.
@@ -184,6 +184,7 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:24px 0}
     <div class="ship s-c" data-g="C">🟣 <b>C · Pre-order</b>: Talkie Doll Keychains, ship mid February 2027</div>
     <div class="ship s-d" data-g="D">🔵 <b>D · Pre-order</b>: Acrylic Photo Display Set and T-shirt, ship early January 2027</div>
     <div class="ship s-e" data-g="E">🟠 <b>E · Pre-order</b>: Jewel Vixen Rouge Doll Keychain, ships late February 2027</div>
+    <div class="ship s-f" data-g="F">🟤 <b>F · Pre-order</b>: Jewel Huggables Plush, ships early March 2027</div>
     <div class="meta" style="font-size:12.5px;color:var(--muted)">We order each group separately so in-stock items aren't held back by pre-orders. Each group is sent to you as soon as it arrives.</div>
   </div>
   <div id="grid" class="grid"></div>
@@ -302,7 +303,7 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:24px 0}
 <script>
 /* ===== SETTINGS: edit these ===== */
 /* Change PAGE_VERSION whenever you change anything on this page (text too), so old saved copies in TikTok/IG reload. */
-const PAGE_VERSION = '2026-11-24 nf holder sold out';
+const PAGE_VERSION = '2026-11-25 jj stock update';
 const RATE = 1.92;     // pesos per baht (locked)
 const MARKUP = 0.12;   // service fee
 /* "taken" = slots already confirmed/paid. Update as orders come in. */
@@ -327,10 +328,10 @@ const JJ = [
   {id:'jj_tee_white', ship:'D', shipg:250, name:'JanJingJing Official T-Shirt (White)', thb:750, max:5, taken:0, meta:'White version · with postcard 5 × 7 in', sizes:['S','M','L','XL','XXL'], tag:'Pre-order'},
   {id:'jj_tee_black', ship:'D', shipg:250, name:'JanJingJing Official T-Shirt (Black)', thb:750, max:5, taken:0, meta:'Black version · with postcard 5 × 7 in', sizes:['S','M','L','XL','XXL'], tag:'Pre-order'},
   {id:'jj_tps', ship:'A', shipg:150, name:'JanJingJing Transparent Photo Set', thb:390, max:10, taken:0, meta:'4 transparent photocards, 2 photo strips, 1 photo keychain'},
-  {id:'jj_plush', ship:'A', shipg:500, name:'Jewel Huggables Plush', thb:1190, max:5, taken:0, meta:'44 cm'},
+  {id:'jj_plush', ship:'F', shipg:500, name:'Jewel Huggables Plush', thb:1190, max:5, taken:0, meta:'44 cm', tag:'Pre-order'},
   {id:'jj_randoll', ship:'A', shipg:110, name:'Jewel Random Doll Keychain (single box)', thb:450, max:6, taken:0, meta:'1 sealed blind box · 7 designs (1 secret)', tag:'Random'},
   {id:'jj_randoll_set', ship:'A', shipg:650, name:'Jewel Random Doll Keychain (whole set, 6 boxes)', thb:2700, max:3, taken:0, meta:'6 sealed blind boxes · 7 designs (1 secret)', tag:'Random'},
-  {id:'jj_holder', ship:'A', shipg:250, name:'Jewel Card Holder with Photocard', thb:350, max:5, taken:0, meta:'11.6 × 15 cm · photocard 5.5 × 8.5 cm'},
+  {id:'jj_holder', closed:true, soldout:true, ship:'A', shipg:250, name:'Jewel Card Holder with Photocard', thb:350, max:0, taken:0, meta:'11.6 × 15 cm · photocard 5.5 × 8.5 cm'},
   {id:'jj_bag', ship:'A', shipg:600, name:'Jewel Journey Bag', thb:1290, max:5, taken:0, meta:'31 × 24 × 12 cm · with postcard'},
   {id:'jj_headband', ship:'A', shipg:100, name:'Jewel Headband', thb:200, max:5, taken:0, meta:'≈ 24 × 5.5 cm'},
   {id:'jj_strap', ship:'A', shipg:60, name:'Jewel Rubber Phone Strap', thb:250, max:5, taken:0, meta:'2.5 × 20.8 cm'},
@@ -376,6 +377,7 @@ const SHIP = {
   C:{cls:'s-c', txt:'🟣 <b>C · Pre-order</b> · ships mid February 2027'},
   D:{cls:'s-d', txt:'🔵 <b>D · Pre-order</b> · ships early January 2027'},
   E:{cls:'s-e', txt:'🟠 <b>E · Pre-order</b> · ships late February 2027'},
+  F:{cls:'s-f', txt:'🟤 <b>F · Pre-order</b> · ships early March 2027'},
   onhand:{cls:'s-a', txt:'🟢 <b>On hand</b> · ships from Nov 21'}
 };
 // price = (baht + 12% markup in baht + est. GMMTV shipping to PH in baht) × ₱1.92, rounded up to the peso
