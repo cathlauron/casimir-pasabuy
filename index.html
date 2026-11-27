@@ -144,7 +144,7 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:24px 0}
   <h1>MilkLove, NamtanFilm &amp; JanJingJing <span>fancon merch</span>, delivered to you in PH</h1>
   <p class="lead">Missed the <b>MilkLove</b>, <b>NamtanFilm</b> or <b>JanJingJing</b> fancon? We'll get the official merch for you and deliver it in the Philippines. Pick what you want, prices are already in pesos.</p>
   <div class="chips">
-    <span class="chip">🗓 Cut-off: <b>MilkLove Nov 30 (DVD Dec 27) · NamtanFilm Nov 29 · JanJingJing Dec 7</b>, 11:59 PM</span>
+    <span class="chip">🗓 Cut-off: <b>NamtanFilm Nov 29 · MilkLove Nov 30 · JanJingJing Dec 7 · DVD Boxsets Dec 27</b>, 11:59 PM</span>
     <span class="chip">🚚 Pre-order items: <b>ship Dec to Mar</b></span>
   </div>
   <div class="closed-note" role="status">
@@ -184,7 +184,7 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:24px 0}
     <div class="ship s-c" data-g="C">🟣 <b>C · Pre-order</b>: Talkie Doll Keychains, ship mid February 2027</div>
     <div class="ship s-d" data-g="D">🔵 <b>D · Pre-order</b>: Acrylic Photo Display Set and T-shirt, ship early January 2027</div>
     <div class="ship s-e" data-g="E">🟠 <b>E · Pre-order</b>: Jewel Vixen Rouge Doll Keychain, ships late February 2027</div>
-    <div class="ship s-f" data-g="F">🟤 <b>F · Pre-order</b>: Jewel Huggables Plush and MilkLove DVD Boxset, ship early March 2027</div>
+    <div class="ship s-f" data-g="F">🟤 <b>F · Pre-order</b>: Jewel Huggables Plush and DVD Boxsets, ship early March 2027</div>
     <div class="meta" style="font-size:12.5px;color:var(--muted)">We order each group separately so in-stock items aren't held back by pre-orders. Each group is sent to you as soon as it arrives.</div>
   </div>
   <div id="grid" class="grid"></div>
@@ -303,14 +303,14 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:24px 0}
 <script>
 /* ===== SETTINGS: edit these ===== */
 /* Change PAGE_VERSION whenever you change anything on this page (text too), so old saved copies in TikTok/IG reload. */
-const PAGE_VERSION = '2026-11-27 milklove dvd';
+const PAGE_VERSION = '2026-11-27 nf dvd';
 const RATE = 1.92;     // pesos per baht (locked)
 const MARKUP = 0.12;   // service fee
 /* "taken" = slots already confirmed/paid. Update as orders come in. */
 const FANCON = [
   {id:'yo_brown', ship:'onhand', name:'Yoonighty YO★ Cap (Beige / Brown)', thb:0, fixed:1100, max:3, taken:0, onhand:true, meta:'On hand, bought in Bangkok', tag:'On hand'},
   {id:'yo_grey', ship:'onhand', name:'Yoonighty YO★ Cap (White / Grey)', thb:0, fixed:1100, max:3, taken:0, onhand:true, meta:'On hand, bought in Bangkok', tag:'On hand'},
-  {id:'dvd', ship:'F', shipg:1200, name:'MilkLove Whimsical House Fancon DVD Boxset', thb:2190, max:5, taken:0, meta:'2 DVDs · 100-page photobook · 4 signed photocards · 13 postcards · 6 special photocards (1 random of 2) · paper doll house · thank you card · order until Dec 27', tag:'Pre-order'},
+  {id:'dvd', ship:'F', shipg:1000, name:'MilkLove Whimsical House Fancon DVD Boxset', thb:2190, max:5, taken:0, meta:'2 DVDs · 100-page photobook · 4 signed photocards · 13 postcards · 6 special photocards (1 random of 2) · paper doll house · thank you card · order until Dec 27', tag:'Pre-order'},
   {id:'talkie',shipg:300, ship:'C', name:'Talkie MuvMuv Doll Keychain', thb:990, max:5, taken:0, meta:'17 cm · 14 voice messages', tag:'Pre-order'},
   {id:'acrylic',shipg:400, ship:'B', name:'Acrylic Photo Display Set', thb:650, max:5, taken:0, meta:'19 × 14.8 cm · photocard 5.5 × 8.5 cm', tag:'Pre-order'},
   {id:'holder',shipg:250, ship:'A', name:'MuvMuv Card Holder with Photocard', thb:350, max:5, taken:0, meta:'12 × 14.7 cm · photocard 5.5 × 8.5 cm'},
@@ -339,6 +339,7 @@ const JJ = [
   {id:'jj_card', soldout:true, name:'JanJingJing Collectible Random Card', thb:200, max:0, taken:0, closed:true, meta:'Sold out at GMMTV', tag:'Random'},
 ];
 const NAMTAN = [
+  {id:'nf_dvd', ship:'F', shipg:1000, name:'NamtanFilm Glamorous Fancon DVD Boxset', thb:2190, max:5, taken:0, meta:'2 DVDs · 100-page photobook · 4 signed photocards · 13 postcards · 6 special photocards (1 random of 2) · paper hand fan with acrylic keychain · 2 thank you cards · order until Dec 27', tag:'Pre-order'},
   {id:'nf_talkie', ship:'C', shipg:300, name:'NamtanFilm Talkie Lunar Doll Keychain', thb:990, max:5, taken:0, meta:'15 cm · 14 voice messages (Thai)', tag:'Pre-order'},
   {id:'nf_acrylic', ship:'B', shipg:400, name:'NamtanFilm Acrylic Photo Display Set', thb:650, max:5, taken:0, meta:'Acrylic stand set with photo frame', tag:'Pre-order'},
   {id:'nf_tps', ship:'A', shipg:150, name:'NamtanFilm Transparent Photo Set', thb:390, max:10, taken:0, meta:'4 transparent photocards, 2 photo strips, 1 transparent tag'},
@@ -425,7 +426,7 @@ function renderGrid(){
   document.getElementById('shopnote').classList.toggle('hidden',tab!=='shop');
   document.getElementById('tabnote').textContent = tab==='fancon'
     ? 'Official Milk Love Whimsical House Fancon merchandise. Merch orders close Nov 30, 11:59 PM · DVD Boxset orders close Dec 27, 11:59 PM.'
-    : tab==='namtan' ? 'Official NamtanFilm Glamorous Fancon merchandise. Orders close Nov 29, 11:59 PM.'
+    : tab==='namtan' ? 'Official NamtanFilm Glamorous Fancon merchandise. Merch orders close Nov 29, 11:59 PM · DVD Boxset orders close Dec 27, 11:59 PM.'
     : tab==='jj' ? 'Official JanJingJing Bewitch You Fancon merchandise. Orders close Dec 7, 11:59 PM.'
     : 'In-stock MuvMuv & MilkLove items from the GMMTV Shop. Order them on their own, or pick one as a backup.';
 }
