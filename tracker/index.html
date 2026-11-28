@@ -117,7 +117,7 @@ tr.open td{background:#fff5f8}
 <div id="tab-buy" class="hidden">
   <div class="card">
     <h2 style="font-size:19px;margin-bottom:4px">What to buy</h2>
-    <p style="margin:0 0 10px;font-size:13.5px;color:var(--muted)">Totals from all orders that aren't cancelled. <b>Paid</b> is what you must buy; <b>Not paid yet</b> is still waiting on GCash.</p>
+    <p style="margin:0 0 10px;font-size:13.5px;color:var(--muted)">Only items you still need to buy: cancelled, refunded, sold-out, already-bought and shipped orders are left out. <b>Paid</b> is what you must buy; <b>Not paid yet</b> is still waiting on GCash.</p>
     <div class="tbl"><table class="blist"><thead><tr><th>Item</th><th class="right">Paid</th><th class="right">Not paid yet</th><th class="right">Total</th></tr></thead><tbody id="buyrows"></tbody></table></div>
   </div>
 </div>
@@ -344,10 +344,13 @@ function renderRows(){
 }
 function renderBuy(){
   const t={};
-  for(const o of orders){ if(o.payStatus==='Cancelled') continue;
-    for(const i of o.items||[]){const k=i.name+(i.size?' ('+i.size+')':''); t[k]=t[k]||{paid:0,unpaid:0}; t[k][o.payStatus==='Paid'?'paid':'unpaid']+=i.qty;}}
+  for(const o of orders){
+    // Only what still has to be bought: skip cancelled, shipped/delivered, sold out/refunded and already-bought orders
+    if(o.payStatus==='Cancelled'||o.shipStatus==='Shipped'||o.shipStatus==='Delivered'||o.buyStatus==='Sold out'||o.buyStatus==='Bought'||o.refundStatus==='Refunded') continue;
+    (o.items||[]).forEach((i,idx)=>{ const left=o.buyStatus==='Partially bought'? i.qty-boughtOf(o,idx) : i.qty; if(left<=0) return;
+      const k=i.name+(i.size?' ('+i.size+')':''); t[k]=t[k]||{paid:0,unpaid:0}; t[k][o.payStatus==='Paid'?'paid':'unpaid']+=left;});}
   const keys=Object.keys(t).sort();
-  document.getElementById('buyrows').innerHTML=keys.length?keys.map(k=>`<tr><td>${esc(k)}</td><td class="right"><b>${t[k].paid}</b></td><td class="right">${t[k].unpaid}</td><td class="right">${t[k].paid+t[k].unpaid}</td></tr>`).join(''):'<tr><td colspan="4" class="empty">No items yet.</td></tr>';
+  document.getElementById('buyrows').innerHTML=keys.length?keys.map(k=>`<tr><td>${esc(k)}</td><td class="right"><b>${t[k].paid}</b></td><td class="right">${t[k].unpaid}</td><td class="right">${t[k].paid+t[k].unpaid}</td></tr>`).join(''):'<tr><td colspan="4" class="empty">Nothing left to buy 🎉</td></tr>';
 }
 function parcelNo(p){const m=String(p||'').match(/\d+/);return m?+m[0]:9999}
 function shipGroups(){
